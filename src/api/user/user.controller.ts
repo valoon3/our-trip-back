@@ -18,12 +18,13 @@ export class UserController {
   // 회원가입
   @Post('/signup')
   signup(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.userService.signup(createUserDto);
   }
 
-  @Post('login')
+  // 로그인
+  @Post('/signin')
   signin(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.userService.signup(createUserDto);
   }
 
   @Get()

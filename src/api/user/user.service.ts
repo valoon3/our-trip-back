@@ -7,13 +7,16 @@ import { UserRepository } from './user.repository';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  // 회원가입
-  signup(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  async signup(createUserDto: CreateUserDto) {
+    // return this.userRepository.create(createUserDto);
+    const userExist = await this.userRepository.findOneByUserEmail(
+      createUserDto.email,
+    );
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    if (userExist) {
+    }
+
+    return this.userRepository.create(createUserDto);
   }
 
   findAll() {
