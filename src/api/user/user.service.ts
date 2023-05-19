@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
@@ -8,12 +8,16 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async signup(createUserDto: CreateUserDto) {
-    // return this.userRepository.create(createUserDto);
     const userExist = await this.userRepository.findOneByUserEmail(
       createUserDto.email,
     );
 
     if (userExist) {
+      // TODO : exception filter 사용하기
+      throw new BadRequestException('email is exist!', {
+        cause: new Error(),
+        description: 'Some error description',
+      });
     }
 
     return this.userRepository.create(createUserDto);
