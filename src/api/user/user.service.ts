@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,17 @@ export class UserService {
         description: 'Some error description',
       });
     }
+
+    // try {
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      Number(`${process.env.HASH_KEY}`),
+    );
+    // } catch (err) {
+    //   console.error(err);
+    // }
+
+    createUserDto.password = hashedPassword;
 
     return this.userRepository.create(createUserDto);
   }
