@@ -1,12 +1,24 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
+import { AuthService } from '../../auth/auth/auth.service';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
+  ) {}
 
   async signup(createUserDto: CreateUserDto) {
     const userExist = await this.userRepository.findOneByUserEmail(
@@ -21,7 +33,6 @@ export class UserService {
       });
     }
 
-    // try {
     const hashedPassword = await bcrypt.hash(
       createUserDto.password,
       Number(`${process.env.HASH_KEY}`),
@@ -34,6 +45,13 @@ export class UserService {
     );
 
     return result;
+  }
+
+  async signin(@Body() body: LoginUserDto) {
+    console.log('login process!!!');
+    console.log(body);
+
+    return this.authService.singIn(body.email, body.password);
   }
 
   findAll() {

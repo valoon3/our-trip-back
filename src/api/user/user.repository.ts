@@ -11,8 +11,8 @@ export class UserRepository {
     private userEntity: Repository<User>,
   ) {}
 
-  async findOneByUserEmail(email: string): Promise<boolean> {
-    const userExist = await this.userEntity.exist({
+  async findOneByUserEmail(email: string): Promise<CreateUserDto> {
+    const userExist = await this.userEntity.findOne({
       where: { email },
     });
 

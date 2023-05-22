@@ -10,6 +10,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('api/user')
 export class UserController {
@@ -23,8 +24,8 @@ export class UserController {
 
   // 로그인
   @Post('/signin')
-  signin(@Body() createUserDto: CreateUserDto) {
-    return this.userService.signup(createUserDto);
+  signin(@Body() loginUserDto: LoginUserDto) {
+    return this.userService.signin(loginUserDto);
   }
 
   @Get()
