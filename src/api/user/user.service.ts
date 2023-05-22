@@ -26,13 +26,14 @@ export class UserService {
       createUserDto.password,
       Number(`${process.env.HASH_KEY}`),
     );
-    // } catch (err) {
-    //   console.error(err);
-    // }
 
     createUserDto.password = hashedPassword;
 
-    return this.userRepository.create(createUserDto);
+    const { password, ...result } = await this.userRepository.create(
+      createUserDto,
+    );
+
+    return result;
   }
 
   findAll() {
