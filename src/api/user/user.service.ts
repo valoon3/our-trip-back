@@ -49,7 +49,6 @@ export class UserService {
 
   async signin(@Body() body: LoginUserDto) {
     console.log('login process!!!');
-    console.log(body);
 
     return this.authService.singIn(body.email, body.password);
   }
