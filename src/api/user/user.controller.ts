@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtAuthGuard } from '../../auth/auth/jwt/jwt.guard';
 
 @Controller('api/user')
 export class UserController {
@@ -24,6 +26,7 @@ export class UserController {
 
   // 로그인
   @Post('/signin')
+  @UseGuards(JwtAuthGuard)
   signin(@Body() loginUserDto: LoginUserDto) {
     return this.userService.signin(loginUserDto);
   }
