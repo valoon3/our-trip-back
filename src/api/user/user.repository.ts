@@ -22,6 +22,7 @@ export class UserRepository {
   async create(creatUserDto: CreateUserDto): Promise<User> {
     const newUser = await this.userEntity.create({
       ...creatUserDto,
+      name: creatUserDto.username,
     });
     return await this.userEntity.save(newUser);
   }
