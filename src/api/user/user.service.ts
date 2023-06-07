@@ -25,12 +25,16 @@ export class UserService {
       createUserDto.email,
     );
 
+    const errors: any = {};
+
     if (userExist) {
       // TODO : exception filter 사용하기
-      throw new BadRequestException('email is exist!', {
-        cause: new Error(),
-        description: 'Some error description',
-      });
+      // throw new BadRequestException('email is exist!', {
+      //   cause: new Error(),
+      //   description: 'Some error description',
+      // });
+      errors.emailError = 'email is exist!';
+      return errors;
     }
 
     const hashedPassword = await bcrypt.hash(
@@ -40,7 +44,7 @@ export class UserService {
 
     createUserDto.password = hashedPassword;
 
-    const { password, ...result } = await this.userRepository.create(
+    const { password, ...result } = await this.userRepository.signup(
       createUserDto,
     );
 

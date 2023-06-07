@@ -19,12 +19,18 @@ export class UserRepository {
     return userExist;
   }
 
-  async create(creatUserDto: CreateUserDto): Promise<User> {
-    const newUser = await this.userEntity.create({
-      ...creatUserDto,
-      name: creatUserDto.username,
-    });
-    return await this.userEntity.save(newUser);
+  async signup(creatUserDto: CreateUserDto): Promise<User> {
+    try {
+      const newUser = await this.userEntity.create({
+        ...creatUserDto,
+        name: creatUserDto.username,
+      });
+
+      return await this.userEntity.save(newUser);
+    } catch (err: any) {
+      console.log(err);
+      throw err;
+    }
   }
 
   async fineAll(): Promise<any> {
