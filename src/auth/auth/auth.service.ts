@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
@@ -24,7 +25,7 @@ export class AuthService {
     if (password.length === 0)
       errors.passwordError = '비밀번호를 입력해주세요.';
 
-    if (Object.keys(errors).length > 0) return errors;
+    if (Object.keys(errors).length > 0) throw new BadRequestException(errors);
 
     const user = await this.userRepository.findOneByUserEmail(email);
 
