@@ -7,7 +7,10 @@ import {
   Param,
   Delete,
   UseGuards,
+  HttpStatus,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -26,9 +29,15 @@ export class UserController {
 
   // 로그인
   @Post('/signin')
-  @UseGuards(JwtAuthGuard)
-  signin(@Body() loginUserDto: LoginUserDto) {
-    return this.userService.signin(loginUserDto);
+  // @UseGuards(JwtAuthGuard)
+  async signin(@Res() res: Response, @Body() loginUserDto: LoginUserDto) {
+    const result = await this.userService.signin(loginUserDto);
+
+    if (Object.keys(result).length > 0) {
+      res.status(HttpStatus.UNAUTHORIZED).json(result);
+    }
+
+    return result;
   }
 
   @Get()

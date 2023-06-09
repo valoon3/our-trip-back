@@ -18,6 +18,14 @@ export class AuthService {
   ) {}
 
   async singIn(email: string, password: string) {
+    const errors: any = {};
+
+    if (email.length === 0) errors.emailError = '이메일을 입력해주세요.';
+    if (password.length === 0)
+      errors.passwordError = '비밀번호를 입력해주세요.';
+
+    if (Object.keys(errors).length > 0) return errors;
+
     const user = await this.userRepository.findOneByUserEmail(email);
 
     if (!user) {
