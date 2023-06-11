@@ -9,7 +9,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
-import { AuthService } from '../../auth/auth/auth.service';
+import { AuthService } from '../auth/auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
@@ -55,19 +55,19 @@ export class UserService {
     return this.authService.singIn(body.email, body.password);
   }
 
-  findAll() {
-    return this.userRepository.fineAll();
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+  // findAll() {
+  //   return this.userRepository.fineAll();
+  // }
+  //
+  // findOne(id: number) {
+  //   return `This action returns a #${id} user`;
+  // }
+  //
+  // update(id: number, updateUserDto: UpdateUserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
+  //
+  // remove(id: number) {
+  //   return `This action removes a #${id} user`;
+  // }
 }

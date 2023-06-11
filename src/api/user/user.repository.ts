@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from '../../db/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,11 +17,21 @@ export class UserRepository {
   ) {}
 
   async findOneByUserEmail(email: string) {
-    const userExist = await this.userEntity.findOne({
+    const result = await this.userEntity.findOne({
       where: { email },
     });
 
-    return userExist;
+    if (result) {
+      return result;
+    }
+
+    throw new NotFoundException(
+      '해당 이메일이 존재하지 않습니다. 이메일을 확인해 주세요.',
+      {
+        cause: new Error(),
+        description: '해당 이메일이 존재하지 않습니다.',
+      },
+    );
   }
 
   async signup(creatUserDto: CreateUserDto): Promise<User> {
