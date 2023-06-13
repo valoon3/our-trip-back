@@ -16,6 +16,12 @@ export class UserRepository {
     private userEntity: Repository<User>,
   ) {}
 
+  async checkExistEmail(email: string) {
+    return await this.userEntity.exist({
+      where: { email },
+    });
+  }
+
   async findOneByUserEmail(email: string) {
     const result = await this.userEntity.findOne({
       where: { email },
@@ -34,11 +40,11 @@ export class UserRepository {
     );
   }
 
-  async signup(creatUserDto: CreateUserDto): Promise<User> {
+  async createUser(creatUserDto: CreateUserDto): Promise<User> {
     try {
       const newUser = await this.userEntity.create({
         ...creatUserDto,
-        name: creatUserDto.username,
+        name: creatUserDto.name,
       });
 
       return await this.userEntity.save(newUser);

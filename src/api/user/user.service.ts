@@ -15,10 +15,13 @@ import { LoginRequestDto } from '../auth/dto/login.request.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly authService: AuthService,
+  ) {}
 
   async signup(createUserDto: CreateUserDto) {
-    const userExist = await this.userRepository.findOneByUserEmail(
+    const userExist = await this.userRepository.checkExistEmail(
       createUserDto.email,
     );
 
@@ -41,7 +44,7 @@ export class UserService {
 
     createUserDto.password = hashedPassword;
 
-    const { password, ...result } = await this.userRepository.signup(
+    const { password, ...result } = await this.userRepository.createUser(
       createUserDto,
     );
 
