@@ -9,16 +9,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
-import { AuthService } from '../auth/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
+import { LoginRequestDto } from '../auth/dto/login.request.dto';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userRepository: UserRepository,
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async signup(createUserDto: CreateUserDto) {
     const userExist = await this.userRepository.findOneByUserEmail(
@@ -51,8 +48,9 @@ export class UserService {
     return result;
   }
 
-  async signin(@Body() body: LoginUserDto) {
-    return this.authService.singIn(body.email, body.password);
+  // todo : AuthModule 에 있는 LoginReqestDto 를 사용하지 않고 중복되지 않도록 타입을 정의할 방법 찾기
+  async signin(@Body() loginRequestDto: LoginRequestDto) {
+    return this.authService.singIn(loginRequestDto);
   }
 
   // findAll() {

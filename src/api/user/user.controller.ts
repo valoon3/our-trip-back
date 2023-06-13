@@ -9,17 +9,25 @@ import {
   UseGuards,
   HttpStatus,
   Res,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { JwtAuthGuard } from '../auth/auth/jwt/jwt.guard';
+import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
+import { AuthService } from '../auth/auth.service';
+import { LoginRequestDto } from '../auth/dto/login.request.dto';
 
 @Controller('api/user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
+  ) {}
 
   // 회원가입
   @Post('/signup')
@@ -30,12 +38,13 @@ export class UserController {
   // 로그인
   @Post('/signin')
   // @UseGuards(JwtAuthGuard)
-  async signin(@Res() res: Response, @Body() loginUserDto: LoginUserDto) {
-    const result = await this.userService.signin(loginUserDto);
+  async signin(@Res() res: Response, @Body() loginRequestDto: LoginRequestDto) {
+    const result = await this.authService.singIn(loginRequestDto);
 
-    if (Object.keys(result).length > 0) {
-      res.status(HttpStatus.UNAUTHORIZED).json(result);
-    }
+    // todo : 중복 아이디가 있을 경우 비밀번호가 일치하지 않을경우 에러처리하기
+    // if (Object.keys(result).length > 0) {
+    //   res.status(HttpStatus.UNAUTHORIZED).json(result);
+    // }
 
     return result;
   }

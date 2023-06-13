@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginRequestDto } from './dto/login.request.dto';
-import { UserRepository } from '../../user/user.repository';
+import { UserRepository } from '../user/user.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -15,10 +15,10 @@ export class AuthService {
   constructor(
     @Inject(forwardRef(() => UserRepository))
     private readonly userRepository: UserRepository,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService, // AuthModule 의 JwtModule 에서 공급받아서 사용
   ) {}
 
-  async singIn(email: string, password: string) {
+  async singIn({ email, password }: LoginRequestDto) {
     // 이메일과 비밀번호의 포맷이 옳바른지 검증
     this.validateLoginForm(email, password);
 
@@ -26,13 +26,13 @@ export class AuthService {
     await this.verifyPassword(password, user.password);
 
     const payload = {
-      sub: user.id,
+      sub: user.id, // 토큰 제목
       email: user.email,
       name: user.name,
     };
 
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload), // 토큰 생성하여 발급 완료
     };
   }
 
@@ -49,7 +49,7 @@ export class AuthService {
   private async verifyPassword(
     password: string,
     hashedPassword: string,
-  ): Promise<void> {
+  ): Promise<boolean | unknown> {
     const isPasswordValidated = await bcrypt.compare(password, hashedPassword);
 
     if (!isPasswordValidated) {
@@ -58,5 +58,7 @@ export class AuthService {
         description: '이메일과 비밀번호를 확인해주세요.',
       });
     }
+
+    return isPasswordValidated;
   }
 }
