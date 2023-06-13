@@ -51,7 +51,6 @@ export class UserService {
     return result;
   }
 
-  // todo : AuthModule 에 있는 LoginReqestDto 를 사용하지 않고 중복되지 않도록 타입을 정의할 방법 찾기
   async signin(@Body() loginRequestDto: LoginRequestDto) {
     return this.authService.singIn(loginRequestDto);
   }

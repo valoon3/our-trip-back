@@ -28,7 +28,7 @@ export class AuthService {
     const payload = {
       sub: user.id, // 토큰 제목
       email: user.email,
-      name: user.name,
+      // name: user.name,
     };
 
     return {
