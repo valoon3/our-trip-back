@@ -11,6 +11,7 @@ import {
   Res,
   Inject,
   forwardRef,
+  Req,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
@@ -20,6 +21,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto } from '../auth/dto/login.request.dto';
+import { CurrentUser } from '../../common/decorators/user.decorator';
 
 @Controller('api/user')
 export class UserController {
@@ -48,6 +50,13 @@ export class UserController {
     // }
 
     return result;
+  }
+
+  // jwt 테스트
+  @UseGuards(JwtAuthGuard)
+  @Post('/test')
+  async test(@CurrentUser() user) {
+    return user;
   }
 
   // @Get()

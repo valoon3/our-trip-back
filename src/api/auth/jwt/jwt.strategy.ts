@@ -2,10 +2,15 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { AuthService } from '../auth.service';
+import { UserRepository } from '../../user/user.repository';
+import { Payload } from './jwt.payload';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userRepository: UserRepository,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       // JWT 가 Req 의 header 에서 추출되는 방법을 제공 // 스키마 bearer 를 사용하여 인증 헤더에서 JWT 를 찾는다
@@ -18,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // Guard 가 Strategy 호출하고 Strategy 는 validate() 를 호출한다.
   // frontEnd 에서 날아온 jwt 가
-  async validate(payload) {
-    // return this.authService.singIn(email, password);
+  async validate(payload: Payload) {
+    return await this.userRepository.findOnByUserId(payload.sub);
   }
 }

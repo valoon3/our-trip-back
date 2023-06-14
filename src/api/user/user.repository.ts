@@ -23,12 +23,12 @@ export class UserRepository {
   }
 
   async findOneByUserEmail(email: string) {
-    const result = await this.userEntity.findOne({
+    const user = await this.userEntity.findOne({
       where: { email },
     });
 
-    if (result) {
-      return result;
+    if (user) {
+      return user;
     }
 
     throw new NotFoundException(
@@ -38,6 +38,22 @@ export class UserRepository {
         description: '해당 이메일이 존재하지 않습니다.',
       },
     );
+  }
+
+  async findOnByUserId(userId: string) {
+    const user = await this.userEntity.findOne({
+      where: { id: Number(userId) },
+    });
+
+    if (user) {
+      const { password, ...result } = user;
+      return result;
+    }
+
+    throw new NotFoundException('잘못된 로그인 정보입니다.', {
+      cause: new Error(),
+      description: '잘못된 로그인 정보입니다.',
+    });
   }
 
   async createUser(creatUserDto: CreateUserDto): Promise<User> {

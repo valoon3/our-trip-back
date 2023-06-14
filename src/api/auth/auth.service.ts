@@ -9,6 +9,7 @@ import { LoginRequestDto } from './dto/login.request.dto';
 import { UserRepository } from '../user/user.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Payload } from './jwt/jwt.payload';
 
 @Injectable()
 export class AuthService {
@@ -25,10 +26,10 @@ export class AuthService {
     const user = await this.userRepository.findOneByUserEmail(email);
     await this.verifyPassword(password, user.password);
 
-    const payload = {
-      sub: user.id, // 토큰 제목
+    const payload: Payload = {
+      sub: user.id.toString(), // 토큰 제목
       email: user.email,
-      // name: user.name,
+      name: user.name,
     };
 
     return {
