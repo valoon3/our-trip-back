@@ -4,6 +4,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  Res,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -51,8 +52,8 @@ export class UserService {
     return result;
   }
 
-  async signin(@Body() loginRequestDto: LoginRequestDto) {
-    return this.authService.singIn(loginRequestDto);
+  async signin(@Body() loginRequestDto: LoginRequestDto, @Res() res) {
+    return this.authService.singIn(loginRequestDto, res);
   }
 
   // findAll() {

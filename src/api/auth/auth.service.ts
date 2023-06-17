@@ -19,7 +19,7 @@ export class AuthService {
     private readonly jwtService: JwtService, // AuthModule 의 JwtModule 에서 공급받아서 사용
   ) {}
 
-  async singIn({ email, password }: LoginRequestDto) {
+  async singIn({ email, password }: LoginRequestDto, res) {
     // 이메일과 비밀번호의 포맷이 옳바른지 검증
     this.validateLoginForm(email, password);
 
@@ -32,9 +32,12 @@ export class AuthService {
       name: user.name,
     };
 
-    return {
-      access_token: await this.jwtService.signAsync(payload), // 토큰 생성하여 발급 완료
-    };
+    res.cookie('token', await this.jwtService.signAsync(payload), {});
+    res.send({ message: 'ok' });
+
+    // {
+    //   access_token: await this.jwtService.signAsync(payload), // 토큰 생성하여 발급 완료
+    // };
   }
 
   private validateLoginForm(email: string, password: string) {
