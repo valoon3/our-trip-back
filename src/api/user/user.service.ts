@@ -53,7 +53,14 @@ export class UserService {
   }
 
   async signin(@Body() loginRequestDto: LoginRequestDto, @Res() res) {
-    return this.authService.singIn(loginRequestDto, res);
+    const token = await this.authService.createToken(loginRequestDto);
+    res.setHeader('Authorization', 'Bearer ' + token);
+
+    // todo : accessToken 만들기
+    res.cookie('token', token, {
+      httponly: true,
+    });
+    res.send({ message: 'jwt token success' });
   }
 
   // findAll() {
