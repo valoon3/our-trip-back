@@ -52,6 +52,14 @@ export class UserController {
     return result;
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('/logout')
+  async logout(@Res() res: Response) {
+    res.setHeader('Set-Cookie', `Authentication=; HttpOnly; Path=/; Max-Age=0`);
+
+    return res.status(200).send('logout success');
+  }
+
   // jwt 테스트
   @UseGuards(JwtAuthGuard)
   @Post('/test')

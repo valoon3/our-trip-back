@@ -54,12 +54,14 @@ export class UserService {
 
   async signin(@Body() loginRequestDto: LoginRequestDto, @Res() res) {
     const token = await this.authService.createToken(loginRequestDto);
-    res.setHeader('Authorization', 'Bearer ' + token);
 
-    // todo : accessToken 만들기
-    res.cookie('token', token, {
-      httponly: true,
-    });
+    // 쿠키를 헤더에 포함시키기
+    res.setHeader('Set-Cookie', 'Bearer ' + token);
+
+    //   // todo : accessToken 만들기
+    //   res.cookie('token', token, {
+    //     httponly: true,
+    //   });
     res.send({ message: 'jwt token success' });
   }
 
