@@ -49,7 +49,7 @@ export class UserController {
     //   res.status(HttpStatus.UNAUTHORIZED).json(result);
     // }
 
-    return result;
+    // return result;
   }
 
   @UseGuards(JwtAuthGuard)
