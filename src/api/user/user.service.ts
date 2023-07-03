@@ -56,7 +56,8 @@ export class UserService {
     const token = await this.authService.createToken(loginRequestDto);
 
     // 쿠키를 헤더에 포함시키기
-    res.setHeader('Set-Cookie', 'Bearer ' + token);
+    // res.setHeader('Set-Cookie', 'Bearer ' + token);
+    res.cookie('token', 'Bearer ' + token);
 
     //   // todo : accessToken 만들기
     //   res.cookie('token', token, {
