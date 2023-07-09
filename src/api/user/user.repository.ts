@@ -40,7 +40,7 @@ export class UserRepository {
     );
   }
 
-  async findOnByUserId(userId: string) {
+  async findOneByUserId(userId: string) {
     const user = await this.userEntity.findOne({
       where: { id: Number(userId) },
     });

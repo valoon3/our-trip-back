@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { AuthService } from '../auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LoginRequestDto } from '../auth/dto/login.request.dto';
+import { Response } from 'express';
 
 @Injectable()
 export class UserService {
@@ -52,18 +53,22 @@ export class UserService {
     return result;
   }
 
-  async signin(@Body() loginRequestDto: LoginRequestDto, @Res() res) {
+  async signin(@Body() loginRequestDto: LoginRequestDto, @Res() res: Response) {
     const token = await this.authService.createToken(loginRequestDto);
 
     // 쿠키를 헤더에 포함시키기
     // res.setHeader('Set-Cookie', 'Bearer ' + token);
-    res.cookie('token', 'Bearer ' + token);
+    res.cookie('token', /*'Bearer ' + */ token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, //1 day
+      path: '/',
+    });
 
     //   // todo : accessToken 만들기
     //   res.cookie('token', token, {
     //     httponly: true,
     //   });
-    res.send({ message: 'jwt token success' });
+    res.send('token success');
   }
 
   // findAll() {

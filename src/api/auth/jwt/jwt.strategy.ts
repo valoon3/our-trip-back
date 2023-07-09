@@ -24,6 +24,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   // Guard 가 Strategy 호출하고 Strategy 는 validate() 를 호출한다.
   // frontEnd 에서 날아온 jwt 가
   async validate(payload: Payload) {
-    return await this.userRepository.findOnByUserId(payload.sub);
+    return await this.userRepository.findOneByUserId(payload.sub);
   }
 }
