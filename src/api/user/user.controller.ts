@@ -13,7 +13,7 @@ import {
   forwardRef,
   Req,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -52,6 +52,14 @@ export class UserController {
     // return result;
   }
 
+  @Post('/info')
+  @UseGuards(JwtAuthGuard)
+  async test(@Req() req: any, @Res() res) {
+    const userInfo = req.user;
+
+    res.status(200).send(userInfo);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('/logout')
   async logout(@Res() res: Response) {
@@ -60,12 +68,12 @@ export class UserController {
     return res.status(200).send('logout success');
   }
 
-  // jwt 테스트
-  @UseGuards(JwtAuthGuard)
-  @Post('/test')
-  async test(@CurrentUser() user) {
-    return user;
-  }
+  // // jwt 테스트
+  // @UseGuards(JwtAuthGuard)
+  // @Post('/test')
+  // async test(@CurrentUser() user) {
+  //   return user;
+  // }
 
   // @Get()
   // findAll() {

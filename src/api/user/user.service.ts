@@ -58,17 +58,19 @@ export class UserService {
 
     // 쿠키를 헤더에 포함시키기
     // res.setHeader('Set-Cookie', 'Bearer ' + token);
-    res.cookie('token', /*'Bearer ' + */ token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, //1 day
-      path: '/',
-    });
+    return res
+      .cookie('token', /*'Bearer ' + */ token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, //1 day
+        path: '/',
+      })
+      .header('')
+      .send('token success');
 
     //   // todo : accessToken 만들기
     //   res.cookie('token', token, {
     //     httponly: true,
     //   });
-    res.send('token success');
   }
 
   // findAll() {

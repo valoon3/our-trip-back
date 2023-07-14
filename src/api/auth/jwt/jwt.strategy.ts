@@ -5,6 +5,14 @@ import { AuthService } from '../auth.service';
 import { UserRepository } from '../../user/user.repository';
 import { Payload } from './jwt.payload';
 
+const cookieExtractor = function (req) {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies['token'] || req.header;
+  }
+  return token;
+};
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -12,7 +20,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly userRepository: UserRepository,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // todo : jwtFromRequest 에 대해서 더 알아보자
+      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: cookieExtractor,
       // JWT 가 Req 의 header 에서 추출되는 방법을 제공 // 스키마 bearer 를 사용하여 인증 헤더에서 JWT 를 찾는다
       secretOrKey: 'secret',
       // 토큰 설명을 위해 대칭 비밀키를 제공하는 옵션
