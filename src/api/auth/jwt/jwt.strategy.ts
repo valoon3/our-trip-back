@@ -1,5 +1,5 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Next, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { AuthService } from '../auth.service';
 import { UserRepository } from '../../user/user.repository';
@@ -7,7 +7,7 @@ import { Payload } from './jwt.payload';
 
 const cookieExtractor = function (req) {
   let token = null;
-  if (req && req.cookies) {
+  if (req && req.cookies['token']) {
     token = req.cookies['token'] || req.header;
   }
   return token;
@@ -28,12 +28,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // 토큰 설명을 위해 대칭 비밀키를 제공하는 옵션
       ignoreExpiration: false,
       // true 의 경우 토큰의 수명이 만료될 경우 401 error 호출한다.
+      failureRedirect: '/user/logout',
     });
   }
 
   // Guard 가 Strategy 호출하고 Strategy 는 validate() 를 호출한다.
   // frontEnd 에서 날아온 jwt 가
   async validate(payload: Payload) {
+    if (payload == null) {
+      console.log('asdf');
+    }
+
     return await this.userRepository.findOneByUserId(payload.sub);
   }
 }

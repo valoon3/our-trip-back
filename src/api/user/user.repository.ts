@@ -7,7 +7,14 @@ import {
 import { User } from '../../db/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
+import {
+  UserInfo,
+  CreateUserDto,
+  LoginUserDto,
+  LoginResult,
+} from '../../common/type/UserInfo.type';
+import * as bcrypt from 'bcrypt';
+import * as process from 'process';
 
 @Injectable()
 export class UserRepository {
@@ -22,7 +29,7 @@ export class UserRepository {
     });
   }
 
-  async findOneByUserEmail(email: string) {
+  async findOneByUserEmail(email: string): Promise<User> {
     const user = await this.userEntity.findOne({
       where: { email },
     });
@@ -56,11 +63,13 @@ export class UserRepository {
     });
   }
 
-  async createUser(creatUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
+      const hashedPassword = await this.passwordHashed(createUserDto.password);
+      createUserDto.password = hashedPassword;
+
       const newUser = await this.userEntity.create({
-        ...creatUserDto,
-        name: creatUserDto.name,
+        ...createUserDto,
       });
 
       return await this.userEntity.save(newUser);
@@ -70,9 +79,53 @@ export class UserRepository {
     }
   }
 
+  async validateUserInfo({
+    email,
+    password,
+  }: LoginUserDto): Promise<LoginResult> {
+    const loginResult: LoginResult = {
+      loginError: false,
+    };
+
+    try {
+      const user = await this.findOneByUserEmail(email);
+
+      if (!user) {
+        throw new Error('해당 이메일이 존재하지 않습니다.');
+      }
+
+      // const hashedPassword = await this.passwordHashed(password);
+
+      if (!bcrypt.compare(password, user.password)) {
+        throw new Error('비밀번호가 일치하지 않습니다.');
+      }
+
+      loginResult.userInfo = {
+        name: user.name,
+        password: user.password,
+        email: user.email,
+      };
+    } catch (err) {
+      loginResult.loginError = true;
+      loginResult.errorMessage = err.message;
+    }
+
+    return loginResult;
+  }
+
   async fineAll(): Promise<any> {
     const result = await this.userEntity.find();
 
     return result;
+  }
+
+  private async passwordHashed(password: string): Promise<string> {
+    console.log(`${process.env.HASH_KEY}`);
+    const hashedPassword = await bcrypt.hash(
+      password,
+      Number(`${process.env.HASH_KEY}`),
+    );
+
+    return hashedPassword;
   }
 }

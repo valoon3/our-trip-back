@@ -9,11 +9,9 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
-import * as bcrypt from 'bcrypt';
 import { AuthService } from '../auth/auth.service';
-import { LoginUserDto } from './dto/login-user.dto';
-import { LoginRequestDto } from '../auth/dto/login.request.dto';
 import { Response } from 'express';
+import { LoginResult, LoginUserDto } from '../../common/type/UserInfo.type';
 
 @Injectable()
 export class UserService {
@@ -39,13 +37,6 @@ export class UserService {
       return errors;
     }
 
-    const hashedPassword = await bcrypt.hash(
-      createUserDto.password,
-      Number(`${process.env.HASH_KEY}`),
-    );
-
-    createUserDto.password = hashedPassword;
-
     const { password, ...result } = await this.userRepository.createUser(
       createUserDto,
     );
@@ -53,8 +44,15 @@ export class UserService {
     return result;
   }
 
-  async signin(@Body() loginRequestDto: LoginRequestDto, @Res() res: Response) {
-    const token = await this.authService.createToken(loginRequestDto);
+  async signin(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
+    const loginResult = await this.userRepository.validateUserInfo(
+      loginUserDto,
+    );
+
+    if (loginResult.loginError) {
+      return res.status(203).json(loginResult);
+    }
+    const token = await this.authService.createToken(loginUserDto);
 
     // 쿠키를 헤더에 포함시키기
     // res.setHeader('Set-Cookie', 'Bearer ' + token);
@@ -65,7 +63,7 @@ export class UserService {
         path: '/',
       })
       .header('')
-      .send('token success');
+      .json(loginResult);
 
     //   // todo : accessToken 만들기
     //   res.cookie('token', token, {

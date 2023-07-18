@@ -54,16 +54,20 @@ export class UserController {
 
   @Post('/info')
   @UseGuards(JwtAuthGuard)
-  async test(@Req() req: any, @Res() res) {
+  async getInfo(@Req() req: any, @Res() res) {
     const userInfo = req.user;
 
     res.status(200).send(userInfo);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('/logout')
   async logout(@Res() res: Response) {
-    res.setHeader('Set-Cookie', `Authentication=; HttpOnly; Path=/; Max-Age=0`);
+    // res.setHeader('Set-Cookie', `Authentication=; HttpOnly; Path=/; Max-Age=0`);
+
+    res.cookie('token', '', {
+      maxAge: 0,
+    });
 
     return res.status(200).send('logout success');
   }
