@@ -11,7 +11,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
 import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
-import { LoginResult, LoginUserDto } from '../../common/type/UserInfo.type';
+import { LoginResult, LoginUserDto } from '../../common/types/UserInfo.type';
 
 @Injectable()
 export class UserService {

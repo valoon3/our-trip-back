@@ -30,6 +30,6 @@ export class User extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToMany(() => Bookmark, (bookmark) => bookmark.bookmarkId)
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmark: Bookmark[];
 }

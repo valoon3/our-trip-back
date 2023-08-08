@@ -12,7 +12,7 @@ import {
   CreateUserDto,
   LoginUserDto,
   LoginResult,
-} from '../../common/type/UserInfo.type';
+} from '../../common/types/UserInfo.type';
 import * as bcrypt from 'bcrypt';
 import * as process from 'process';
 
