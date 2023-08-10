@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   Req,
@@ -16,6 +17,26 @@ import { User } from '../../db/entities/user.entity';
 export class TripController {
   constructor(private readonly tripService: TripService) {}
 
+  // 북마크 조회
+  @Get('/bookmark')
+  async getBookmark(@Req() req): Promise<string[]> {
+    const userLoginInfo = req.user;
+
+    console.log(await this.tripService.getBookMark(userLoginInfo));
+
+    return this.tripService.getBookMark(userLoginInfo);
+  }
+
+  @Get('/bookmark/:place_Id')
+  async getBookmarkByOne(
+    @Req() req,
+    @Param('place_Id') place_Id: string,
+  ): Promise<boolean> {
+    const userLoginInfo = req.user;
+
+    return this.tripService.getBookMarkByOne(userLoginInfo, place_Id);
+  }
+
   // 북마크 추가
   @Post('/bookmark')
   async createBookmark(
@@ -28,6 +49,7 @@ export class TripController {
     return this.tripService.createBookMark(req.user, placeResult);
   }
 
+  // 북마크 삭제
   @Delete('/bookmark/:place_Id')
   async deleteBookmark(
     // @Body('placeResult') placeResult: google.maps.places.PlaceResult,
@@ -36,10 +58,6 @@ export class TripController {
   ) {
     return this.tripService.deleteBookMark(req.user, place_Id);
   }
-
-  // 북마크 삭제
-
-  // 북마크 조회
 
   // 계획 추가
 

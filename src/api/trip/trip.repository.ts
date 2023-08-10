@@ -14,6 +14,26 @@ export class TripRepository {
     private userEntity: Repository<User>,
   ) {}
 
+  async getBookMark(userLoginId: number): Promise<Bookmark[]> {
+    return this.bookmarkEntity.find({
+      where: {
+        user: userLoginId,
+      },
+    });
+  }
+
+  async getBookMarkByOne(
+    userLoginId: number,
+    placeId: string,
+  ): Promise<boolean> {
+    return this.bookmarkEntity.exist({
+      where: {
+        user: userLoginId,
+        placeId: placeId,
+      },
+    });
+  }
+
   async createBookMark(
     userLoginId: number,
     placeResult: google.maps.places.PlaceResult,

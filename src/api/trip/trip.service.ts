@@ -6,6 +6,21 @@ import { User } from '../../db/entities/user.entity';
 export class TripService {
   constructor(private readonly tripRepository: TripRepository) {}
 
+  async getBookMark(userLoginInfo: User) {
+    const bookmarks = await this.tripRepository.getBookMark(userLoginInfo.id);
+    return bookmarks.map((bookmark) => bookmark.placeId);
+  }
+
+  async getBookMarkByOne(
+    userLoginInfo: User,
+    placeId: string,
+  ): Promise<boolean> {
+    return await this.tripRepository.getBookMarkByOne(
+      userLoginInfo.id,
+      placeId,
+    );
+  }
+
   async createBookMark(
     userLoginInfo: User,
     placeResult: google.maps.places.PlaceResult,
