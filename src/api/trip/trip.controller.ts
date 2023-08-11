@@ -10,7 +10,9 @@ import {
 } from '@nestjs/common';
 import { TripService } from './trip.service';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
-import { User } from '../../db/entities/user.entity';
+import { User } from '../../db/entities/User.entity';
+import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
+import { Place } from '../../db/entities/trip/Place.entity';
 
 @Controller('api/trip')
 @UseGuards(JwtAuthGuard)
@@ -34,13 +36,20 @@ export class TripController {
   ): Promise<boolean> {
     const userLoginInfo = req.user;
 
-    return this.tripService.getBookMarkByOne(userLoginInfo, place_Id);
+    const result = await this.tripService.getBookMarkByOne(
+      userLoginInfo,
+      place_Id,
+    );
+
+    console.log(result);
+
+    return result;
   }
 
   // 북마크 추가
   @Post('/bookmark')
   async createBookmark(
-    @Body('placeResult') placeResult: google.maps.places.PlaceResult,
+    @Body('placeResult') placeResult: GoogleMapPlaceResult,
     @Req() req,
   ) {
     console.log(placeResult);

@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { TripRepository } from './trip.repository';
-import { User } from '../../db/entities/user.entity';
+import { User } from '../../db/entities/User.entity';
+import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
+import { Place } from '../../db/entities/trip/Place.entity';
 
 @Injectable()
 export class TripService {
@@ -8,7 +10,7 @@ export class TripService {
 
   async getBookMark(userLoginInfo: User) {
     const bookmarks = await this.tripRepository.getBookMark(userLoginInfo.id);
-    return bookmarks.map((bookmark) => bookmark.placeId);
+    return bookmarks.map((bookmark) => bookmark.place);
   }
 
   async getBookMarkByOne(
@@ -21,10 +23,7 @@ export class TripService {
     );
   }
 
-  async createBookMark(
-    userLoginInfo: User,
-    placeResult: google.maps.places.PlaceResult,
-  ) {
+  async createBookMark(userLoginInfo: User, placeResult: GoogleMapPlaceResult) {
     const bookmark = await this.tripRepository.createBookMark(
       userLoginInfo.id,
       placeResult,

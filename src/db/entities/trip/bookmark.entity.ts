@@ -2,24 +2,25 @@ import {
   Column,
   Entity,
   Index,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../user.entity';
+import { User } from '../User.entity';
+import { Place } from './Place.entity';
 
 @Entity()
 export class Bookmark {
-  // @PrimaryGeneratedColumn()
-  // bookmarkId: number;
-  @PrimaryColumn()
-  placeId: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Index()
   @ManyToOne(() => User, (User) => User.id)
   user: number;
 
-  // @Column()
-  // placeName?: string;
+  @ManyToOne(() => Place, (Place) => Place.placeId)
+  place: string;
 }
