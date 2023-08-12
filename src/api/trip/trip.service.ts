@@ -17,7 +17,7 @@ export class TripService {
     userLoginInfo: User,
     placeId: string,
   ): Promise<boolean> {
-    return await this.tripRepository.getBookMarkByOne(
+    return await this.tripRepository.getBookMarkByPlaceId(
       userLoginInfo.id,
       placeId,
     );

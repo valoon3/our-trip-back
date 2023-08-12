@@ -16,12 +16,12 @@ export class Place {
   // @PrimaryGeneratedColumn()
   // id: number;
 
-  @PrimaryColumn()
   // @Column()
   @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
   placeId: string;
 
-  @Column()
+  @PrimaryColumn()
+  // @Column()
   name?: string;
 
   @Column()

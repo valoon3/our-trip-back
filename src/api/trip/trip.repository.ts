@@ -26,14 +26,14 @@ export class TripRepository {
     });
   }
 
-  async getBookMarkByOne(
+  async getBookMarkByPlaceId(
     userLoginId: number,
     placeId: string,
   ): Promise<boolean> {
     let result;
 
     try {
-      result = this.bookmarkRepository.exist({
+      result = await this.bookmarkRepository.find({
         where: {
           user: userLoginId,
           place: placeId,
@@ -45,7 +45,7 @@ export class TripRepository {
 
     console.log(result);
 
-    return result;
+    return result || false;
   }
 
   async createBookMark(userLoginId: number, placeResult: GoogleMapPlaceResult) {
