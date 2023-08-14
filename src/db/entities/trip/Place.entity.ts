@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
+  Double,
   Entity,
   ManyToOne,
   OneToMany,
@@ -15,25 +16,25 @@ import { Bookmark } from './bookmark.entity';
 export class Place {
   // @PrimaryGeneratedColumn()
   // id: number;
-
   // @Column()
-  @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
-  placeId: string;
-
   @PrimaryColumn()
-  // @Column()
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
+  id: string;
+
+  // @PrimaryColumn()
+  @Column()
   name?: string;
 
   @Column()
   address?: string; // formatted_address
 
-  @Column()
+  @Column({ type: 'double precision' })
   geometry_lat?: number; // geometry.location.lat
 
-  @Column()
+  @Column({ type: 'double precision' })
   geometry_lng?: number; // geometry.location.lng
 
-  @Column()
+  @Column({ type: 'double precision', nullable: true })
   rating?: number; // rating
 
   @Column()
@@ -42,11 +43,11 @@ export class Place {
   @Column()
   formatted_address?: string;
 
-  @Column()
-  lng?: number;
-
-  @Column()
-  lat?: number;
+  // @Column({ type: 'integer' })
+  // lng?: Double;
+  //
+  // @Column({ type: 'integer' })
+  // lat?: Double;
 
   @Column()
   icon?: string;

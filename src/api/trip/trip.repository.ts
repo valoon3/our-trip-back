@@ -33,46 +33,58 @@ export class TripRepository {
     let result;
 
     try {
-      result = await this.bookmarkRepository.find({
+      result = await this.bookmarkRepository.exist({
         where: {
-          user: userLoginId,
+          // user: userLoginId,
           place: placeId,
+          user: userLoginId,
         },
       });
     } catch (err) {
       console.error(err);
     }
 
-    console.log(result);
-
     return result || false;
   }
 
   async createBookMark(userLoginId: number, placeResult: GoogleMapPlaceResult) {
+    const place = await this.placeRepository.upsert(
+      {
+        id: placeResult.place_id,
+        name: placeResult.name,
+        address: placeResult.formatted_address,
+        geometry_lat: placeResult.lat,
+        geometry_lng: placeResult.lng,
+        rating: placeResult.rating,
+        business_status: placeResult.business_status,
+        formatted_address: placeResult.formatted_address,
+        icon: placeResult.icon,
+        icon_background_color: placeResult.icon_background_color,
+        icon_mask_base_uri: placeResult.icon_mask_base_uri,
+        types: placeResult.types,
+        user_ratings_total: placeResult.user_ratings_total,
+      },
+      ['id'],
+    );
+
     const bookmark = this.bookmarkRepository.create({
       user: userLoginId,
       place: placeResult.place_id,
     });
 
-    const place = this.placeRepository.merge({
-      placeId: placeResult.place_id,
-      name: placeResult.name,
-      address: placeResult.formatted_address,
-      geometry_lat: placeResult.lat,
-      geometry_lng: placeResult.lng,
-      rating: placeResult.rating,
-      business_status: placeResult.business_status,
-      formatted_address: placeResult.formatted_address,
-      icon: placeResult.icon,
-      icon_background_color: placeResult.icon_background_color,
-      icon_mask_base_uri: placeResult.icon_mask_base_uri,
-      types: placeResult.types,
-      user_ratings_total: placeResult.user_ratings_total,
-    });
+    console.log(place);
 
-    await this.placeRepository.save(place);
+    // await this.placeRepository.save(place);
 
-    return this.bookmarkRepository.save(bookmark);
+    // const bookmark = this.bookmarkRepository.create({
+    //   user: userLoginId,
+    //   // place: place,
+    //   place: placeResult.place_id,
+    // });
+    //
+    // // return await this.placeRepository.save(place);
+    //
+    return await this.bookmarkRepository.save(bookmark);
   }
 
   async deleteBookMark(
@@ -84,15 +96,5 @@ export class TripRepository {
       user: userLoginId,
       place: placeId,
     });
-  }
-
-  private async getPlace(placeId: string) {
-    const result = await this.placeRepository.exist({
-      where: {
-        placeId: placeId,
-      },
-    });
-
-    return result;
   }
 }

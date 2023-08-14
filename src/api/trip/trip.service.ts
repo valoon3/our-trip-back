@@ -28,9 +28,10 @@ export class TripService {
       userLoginInfo.id,
       placeResult,
     );
-    const { user, ...result } = bookmark;
+    // const { user, ...result } = bookmark;
 
-    return result;
+    // return result;
+    return bookmark;
   }
 
   async deleteBookMark(

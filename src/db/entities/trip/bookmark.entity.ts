@@ -21,6 +21,6 @@ export class Bookmark {
   @ManyToOne(() => User, (User) => User.id)
   user: number;
 
-  @ManyToOne(() => Place, (Place) => Place.placeId)
+  @ManyToOne(() => Place, (Place) => Place.id)
   place: string;
 }
