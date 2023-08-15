@@ -41,8 +41,6 @@ export class TripController {
       place_Id,
     );
 
-    console.log(result);
-
     return result;
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityPropertyNotFoundError, Repository } from 'typeorm';
 import { Bookmark } from '../../db/entities/trip/bookmark.entity';
 import { User } from '../../db/entities/User.entity';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
@@ -35,11 +35,11 @@ export class TripRepository {
     try {
       result = await this.bookmarkRepository.exist({
         where: {
-          // user: userLoginId,
           place: placeId,
           user: userLoginId,
         },
       });
+      console.log(result);
     } catch (err) {
       console.error(err);
     }

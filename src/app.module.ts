@@ -6,6 +6,7 @@ import { TypeOrmConfigService } from './config/db/typeorm.config';
 import { AuthModule } from './api/auth/auth.module';
 import { TripModule } from './api/trip/trip.module';
 import globalConfig from './globalConfiguration';
+import { LoggerMiddleware } from './common/middlewares/Logger.middleware';
 
 @Module({
   imports: [
@@ -21,4 +22,8 @@ import globalConfig from './globalConfiguration';
   providers: [],
 })
 // todo : DB query 디버깅 방법 추가하자
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer): any {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
