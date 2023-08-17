@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { Bookmark } from './bookmark.entity';
 
-@Entity()
+@Entity({ name: 'places' })
 export class Place {
   // @PrimaryGeneratedColumn()
   // id: number;

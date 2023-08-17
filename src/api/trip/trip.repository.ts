@@ -18,12 +18,16 @@ export class TripRepository {
     private placeRepository: Repository<Place>,
   ) {}
 
-  async getBookMark(userLoginId: number): Promise<Bookmark[]> {
-    return this.bookmarkRepository.find({
-      where: {
-        user: userLoginId,
-      },
-    });
+  async getBookMarks(userLoginId: number): Promise<Bookmark[]> {
+    const queryBuilder = this.bookmarkRepository.createQueryBuilder('bookmark');
+    const result = await queryBuilder
+      .leftJoinAndSelect('bookmark.place', 'place')
+      .where('bookmark.user = :userLoginId', { userLoginId })
+      .getMany();
+
+    console.log(result);
+
+    return result;
   }
 
   async getBookMarkByPlaceId(
@@ -33,13 +37,13 @@ export class TripRepository {
     let result;
 
     try {
-      result = await this.bookmarkRepository.exist({
-        where: {
-          place: placeId,
-          user: userLoginId,
-        },
-      });
-      console.log(result);
+      const find = await this.bookmarkRepository
+        .createQueryBuilder('bookmark')
+        .where('bookmark.user = :userLoginId', { userLoginId })
+        .andWhere('bookmark.place = :placeId', { placeId })
+        .getOne();
+
+      if (find !== null) result = true;
     } catch (err) {
       console.error(err);
     }
@@ -74,16 +78,6 @@ export class TripRepository {
 
     console.log(place);
 
-    // await this.placeRepository.save(place);
-
-    // const bookmark = this.bookmarkRepository.create({
-    //   user: userLoginId,
-    //   // place: place,
-    //   place: placeResult.place_id,
-    // });
-    //
-    // // return await this.placeRepository.save(place);
-    //
     return await this.bookmarkRepository.save(bookmark);
   }
 

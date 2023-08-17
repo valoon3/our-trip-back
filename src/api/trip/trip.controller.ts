@@ -20,14 +20,16 @@ export class TripController {
   constructor(private readonly tripService: TripService) {}
 
   // 북마크 조회
-  @Get('/bookmark')
+  @Get('/bookmarks')
   async getBookmark(@Req() req): Promise<string[]> {
     const userLoginInfo = req.user;
 
-    console.log(await this.tripService.getBookMark(userLoginInfo));
+    // console.log(await this.tripService.getBookMark(userLoginInfo));
 
-    return this.tripService.getBookMark(userLoginInfo);
+    return this.tripService.getBookMarks(userLoginInfo);
   }
+
+  // @Get('/bookmarks')
 
   @Get('/bookmark/:place_Id')
   async getBookmarkByOne(

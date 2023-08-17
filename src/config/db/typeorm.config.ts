@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { LoggerOptions } from 'typeorm';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -8,7 +9,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   private readonly config: ConfigService;
 
   public createTypeOrmOptions(): TypeOrmModuleOptions {
-    const isDev: boolean = this.config.get('MODE') === 'dev' ? true : false;
+    // const isDev: boolean = this.config.get('MODE') === 'dev' ? true : false;
+    // const isDev: LoggerOptions = ['query', 'error'];
+    const isDev: LoggerOptions = true;
 
     return {
       type: 'postgres',

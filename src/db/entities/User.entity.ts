@@ -11,7 +11,7 @@ import { IsEmail, Length } from 'class-validator';
 import BaseEntity from './Entity';
 import { Bookmark } from './trip/bookmark.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User extends BaseEntity {
   @Index()
   @IsEmail(undefined, { message: '이메일 형식이 아닙니다.' })

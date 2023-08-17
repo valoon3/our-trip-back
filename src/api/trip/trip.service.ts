@@ -8,8 +8,8 @@ import { Place } from '../../db/entities/trip/Place.entity';
 export class TripService {
   constructor(private readonly tripRepository: TripRepository) {}
 
-  async getBookMark(userLoginInfo: User) {
-    const bookmarks = await this.tripRepository.getBookMark(userLoginInfo.id);
+  async getBookMarks(userLoginInfo: User) {
+    const bookmarks = await this.tripRepository.getBookMarks(userLoginInfo.id);
     return bookmarks.map((bookmark) => bookmark.place);
   }
 
