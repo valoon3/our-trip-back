@@ -7,6 +7,8 @@ import { AuthModule } from './api/auth/auth.module';
 import { TripModule } from './api/trip/trip.module';
 import globalConfig from './globalConfiguration';
 import { LoggerMiddleware } from './common/middlewares/Logger.middleware';
+import { TestController } from './api/test/test/test.controller';
+import { TestService } from './api/test/test/test.service';
 
 @Module({
   imports: [
@@ -19,7 +21,8 @@ import { LoggerMiddleware } from './common/middlewares/Logger.middleware';
     AuthModule,
     TripModule,
   ],
-  providers: [],
+  providers: [TestService],
+  controllers: [TestController],
 })
 // todo : DB query 디버깅 방법 추가하자
 export class AppModule implements NestModule {
