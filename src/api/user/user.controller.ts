@@ -41,14 +41,7 @@ export class UserController {
   @Post('/signin')
   // @UseGuards(JwtAuthGuard)
   async signin(@Res() res, @Body() loginRequestDto: LoginRequestDto) {
-    const result = await this.userService.signin(loginRequestDto, res);
-
-    // todo : 중복 아이디가 있을 경우 비밀번호가 일치하지 않을경우 에러처리하기
-    // if (Object.keys(result).length > 0) {
-    //   res.status(HttpStatus.UNAUTHORIZED).json(result);
-    // }
-
-    // return result;
+    return await this.userService.signin(loginRequestDto, res);
   }
 
   @Post('/info')
