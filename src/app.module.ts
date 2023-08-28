@@ -17,7 +17,7 @@ import { TestController } from './api/test/test/test.controller';
       load: [globalConfig],
     }),
     // TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
-    TypeOrmModule.forRoot(TypeOrmConfigService),
+    TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     // TypeOrmModule.forRoot({
     //   type: 'postgres',
     //   host: process.env.DATABASE_HOST,

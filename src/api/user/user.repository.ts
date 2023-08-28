@@ -23,7 +23,7 @@ export class UserRepository {
     private userEntity: Repository<User>,
   ) {}
 
-  async checkExistEmail(email: string) {
+  async checkExistEmail(email: string): Promise<boolean> {
     return await this.userEntity.exist({
       where: { email },
     });
