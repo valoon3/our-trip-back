@@ -26,7 +26,7 @@ export class TripController {
 
     // console.log(await this.tripService.getBookMark(userLoginInfo));
 
-    return this.tripService.getBookMarks(userLoginInfo);
+    return this.tripService.getBookMarks(userLoginInfo.id);
   }
 
   // @Get('/bookmarks')

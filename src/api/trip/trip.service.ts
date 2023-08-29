@@ -8,37 +8,34 @@ import { Place } from '../../db/entities/trip/Place.entity';
 export class TripService {
   constructor(private readonly tripRepository: TripRepository) {}
 
-  async getBookMarks(userLoginInfo: User) {
-    const bookmarks = await this.tripRepository.getBookMarks(userLoginInfo.id);
+  async getBookMarks(userLoginId: number) {
+    const bookmarks = await this.tripRepository.getBookMarks(userLoginId);
     return bookmarks.map((bookmark) => bookmark.place);
   }
 
   async getBookMarkByOne(
-    userLoginInfo: User,
+    userLoginId: number,
     placeId: string,
   ): Promise<boolean> {
-    return await this.tripRepository.getBookMarkByPlaceId(
-      userLoginInfo.id,
-      placeId,
-    );
+    return await this.tripRepository.getBookMarkByPlaceId(userLoginId, placeId);
   }
 
-  async createBookMark(userLoginInfo: User, placeResult: GoogleMapPlaceResult) {
-    const bookmark = await this.tripRepository.createBookMark(
-      userLoginInfo.id,
-      placeResult,
-    );
-    // const { user, ...result } = bookmark;
+  // async createBookMark(userLoginId: number, placeResult: GoogleMapPlaceResult) {
+  //   const bookmark = await this.tripRepository.createBookMark(
+  //     userLoginId,
+  //     placeResult,
+  //   );
+  //   // const { user, ...result } = bookmark;
+  //
+  //   // return result;
+  //   return bookmark;
+  // }
 
-    // return result;
-    return bookmark;
-  }
-
-  async deleteBookMark(
-    userLoginInfo: User,
-    placeId: string,
-    // placeResult: google.maps.places.PlaceResult,
-  ) {
-    return this.tripRepository.deleteBookMark(userLoginInfo.id, placeId);
-  }
+  // async deleteBookMark(
+  //   userLoginId: number,
+  //   placeId: string,
+  //   // placeResult: google.maps.places.PlaceResult,
+  // ) {
+  //   return this.tripRepository.deleteBookMark(userLoginId, placeId);
+  // }
 }
