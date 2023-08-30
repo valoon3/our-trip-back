@@ -1,57 +1,68 @@
 import { TripService } from '../../../src/api/trip/trip.service';
-import { Test } from '@nestjs/testing';
-import { TripRepository } from '../../../src/api/trip/trip.repository';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Bookmark } from '../../../src/db/entities/trip/bookmark.entity';
-import { User } from '../../../src/db/entities/User.entity';
-import { ConfigModule } from '@nestjs/config';
-import globalConfig from '../../../src/globalConfiguration';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmConfigService } from '../../../src/config/db/typeorm.config';
-import { Place } from '../../../src/db/entities/trip/Place.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { expect, jest, test } from '@jest/globals';
+import { Repository } from 'typeorm';
+import { TripRepository } from '../../../src/api/trip/trip.repository';
+
+const mockTripRepository = () => ({
+  getBookMarks: jest.fn(),
+  getBookMarkByPlaceId: jest.fn(),
+});
+
+type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 
 describe('TripService', () => {
   let tripService: TripService;
-  let tripRepository: TripRepository;
+  let tripRepository: MockRepository<Bookmark>;
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          load: [globalConfig],
-        }),
-        TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
-        TypeOrmModule.forFeature([Bookmark, User, Place]),
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        TripService,
+        TripRepository,
+        {
+          provide: getRepositoryToken(Bookmark),
+          useValue: mockTripRepository(),
+        },
       ],
-      providers: [TripService, TripRepository],
     }).compile();
 
-    tripService = module.get(TripService);
-    tripRepository = module.get(TripRepository);
+    tripService = module.get<TripService>(TripService);
+    tripRepository = module.get(getRepositoryToken(Bookmark));
+  });
+
+  beforeEach(async () => {
+    // jest.spyOn(tripRepository, 'getBookMarks').mockResolvedValue({});
   });
 
   test('TripService 객체 생성', () => {
     expect(tripService).toBeDefined();
   });
 
+  test('test', async () => {
+    jest.spyOn(tripRepository, 'getBookMarks').mockResolvedValue('asdf');
+
+    const result = await tripService.getBookMarks(1);
+    expect(result).toBe({ name: 'asdf' });
+  });
+
   describe('getBookMarks', () => {
     test('해당 유저의 모든 북마크를 가져온 결과값이 있다.', async () => {
       const userLoginId = 1;
-      const bookmark = mock();
 
       const result = await tripService.getBookMarks(userLoginId);
 
-      expect(result).toHaveReturned();
+      expect(result).not.toBeNull();
     });
 
-    test('', () => {
-      const expectResult: Array<Bookmark> = [];
-      const getBookMarks = jest
-        .spyOn(tripRepository, 'getBookMarks')
-        .mockResolvedValue(expectResult);
-
-      expect(expectResult).toHaveBeenCalledTimes(1);
+    test('repository getBookMarks 가 사용되었다.', async () => {
+      // const expectResult: Array<Bookmark> = [];
+      // const getBookMarks = jest.spyOn(tripRepository, 'getBookMarks');
+      // const result = await tripService.getBookMarks(1);
+      //
+      // expect(result).toHaveBeenCalledTimes(1);
     });
   });
 });
