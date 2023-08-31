@@ -11,42 +11,34 @@ const mockTripRepository = () => ({
   getBookMarkByPlaceId: jest.fn(),
 });
 
-type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
-
 describe('TripService', () => {
   let tripService: TripService;
-  let tripRepository: MockRepository<Bookmark>;
+  let tripRepository: TripRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TripService,
-        TripRepository,
         {
-          provide: getRepositoryToken(Bookmark),
+          provide: TripRepository,
           useValue: mockTripRepository(),
         },
       ],
     }).compile();
 
     tripService = module.get<TripService>(TripService);
-    tripRepository = module.get(getRepositoryToken(Bookmark));
-  });
-
-  beforeEach(async () => {
-    // jest.spyOn(tripRepository, 'getBookMarks').mockResolvedValue({});
   });
 
   test('TripService 객체 생성', () => {
     expect(tripService).toBeDefined();
   });
 
-  test('test', async () => {
-    jest.spyOn(tripRepository, 'getBookMarks').mockResolvedValue('asdf');
-
-    const result = await tripService.getBookMarks(1);
-    expect(result).toBe({ name: 'asdf' });
-  });
+  // test('test', async () => {
+  //   jest.spyOn(tripRepository, 'getBookMarks').mockResolvedValue('asdf');
+  //
+  //   const result = await tripService.getBookMarks(1);
+  //   expect(result).toBe({ name: 'asdf' });
+  // });
 
   describe('getBookMarks', () => {
     test('해당 유저의 모든 북마크를 가져온 결과값이 있다.', async () => {
