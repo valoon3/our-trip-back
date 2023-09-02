@@ -1,7 +1,7 @@
 import { TripService } from '../../../src/api/trip/trip.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { expect, jest, test } from '@jest/globals';
-import { TripRepository } from '../../../src/api/trip/trip.repository';
+import { BookmarkRepository } from '../../../src/api/trip/bookmark.repository';
 import { Bookmark } from '../../../src/db/entities/trip/bookmark.entity';
 
 const jestMock = jest.mock('../../../src/api/trip/trip.repository');
@@ -28,21 +28,21 @@ const mockTripRepository = () => ({
 
 describe('TripService', () => {
   let tripService: TripService;
-  let tripRepository;
+  let bookmarkRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TripService,
         {
-          provide: TripRepository,
+          provide: BookmarkRepository,
           useValue: mockTripRepository(),
         },
       ],
     }).compile();
 
     tripService = module.get<TripService>(TripService);
-    tripRepository = module.get<TripRepository>(TripRepository);
+    bookmarkRepository = module.get<BookmarkRepository>(BookmarkRepository);
   });
 
   test('TripService 객체 생성', () => {
@@ -54,7 +54,7 @@ describe('TripService', () => {
       const userLoginId = 1;
 
       const result = await tripService.getBookMarks(userLoginId);
-      const spyTest = jest.spyOn(tripRepository, 'getBookMarks');
+      const spyTest = jest.spyOn(bookmarkRepository, 'getBookMarks');
 
       expect(spyTest).toHaveBeenCalledTimes(1);
       expect(result).not.toBeNull();

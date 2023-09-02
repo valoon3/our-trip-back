@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityPropertyNotFoundError, Repository } from 'typeorm';
+import { DeleteResult, EntityPropertyNotFoundError, Repository } from 'typeorm';
 import { Bookmark } from '../../db/entities/trip/bookmark.entity';
-import { User } from '../../db/entities/User.entity';
-import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
-import { Place } from '../../db/entities/trip/Place.entity';
-import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 
 @Injectable()
-export class TripRepository {
+export class BookmarkRepository {
   constructor(
     @InjectRepository(Bookmark)
     private bookmarkRepository: Repository<Bookmark>, // @InjectRepository(User) // private userRepository: Repository<User>, // @InjectRepository(Place) // private placeRepository: Repository<Place>,
@@ -77,14 +73,14 @@ export class TripRepository {
   //   return await this.bookmarkRepository.save(bookmark);
   // }
 
-  // async deleteBookMark(
-  //   userLoginId: number,
-  //   placeId: string,
-  //   // placeResult: google.maps.places.PlaceResult,
-  // ): Promise<DeleteResult> {
-  //   return this.bookmarkRepository.delete({
-  //     user: userLoginId,
-  //     place: placeId,
-  //   });
-  // }
+  async delete(
+    userLoginId: number,
+    placeId: string,
+    // placeResult: google.maps.places.PlaceResult,
+  ): Promise<DeleteResult> {
+    return this.bookmarkRepository.delete({
+      user: userLoginId,
+      place: placeId,
+    });
+  }
 }

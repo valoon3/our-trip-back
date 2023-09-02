@@ -25,22 +25,22 @@ export class Place {
   @Column()
   name?: string;
 
-  @Column()
+  @Column({ nullable: true })
   address?: string; // formatted_address
 
-  @Column({ type: 'double precision' })
+  @Column({ type: 'double precision', nullable: true })
   geometry_lat?: number; // geometry.location.lat
 
-  @Column({ type: 'double precision' })
+  @Column({ type: 'double precision', nullable: true })
   geometry_lng?: number; // geometry.location.lng
 
   @Column({ type: 'double precision', nullable: true })
   rating?: number; // rating
 
-  @Column()
+  @Column({ nullable: true })
   business_status?: string;
 
-  @Column()
+  @Column({ nullable: true })
   formatted_address?: string;
 
   // @Column({ type: 'integer' })
@@ -49,18 +49,18 @@ export class Place {
   // @Column({ type: 'integer' })
   // lat?: Double;
 
-  @Column()
+  @Column({ nullable: true })
   icon?: string;
 
-  @Column()
+  @Column({ nullable: true })
   icon_background_color?: string;
 
-  @Column()
+  @Column({ nullable: true })
   icon_mask_base_uri?: string;
 
   @Column({ type: 'json', nullable: true })
   types?;
 
-  @Column()
+  @Column({ nullable: true })
   user_ratings_total?: number;
 }

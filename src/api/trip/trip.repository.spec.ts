@@ -1,4 +1,4 @@
-import { TripRepository } from './trip.repository';
+import { BookmarkRepository } from './bookmark.repository';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserRepository } from '../user/user.repository';
 import { Bookmark } from '../../db/entities/trip/bookmark.entity';
@@ -14,15 +14,15 @@ const mockTripRepository = () => ({
 });
 
 describe('TripRepository', () => {
-  let tripRepository: TripRepository;
+  let tripRepository: BookmarkRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TripRepository],
+      providers: [BookmarkRepository],
       imports: [TypeOrmModule.forFeature([User, Bookmark, Place])],
     }).compile();
 
-    tripRepository = module.get<TripRepository>(TripRepository);
+    tripRepository = module.get<BookmarkRepository>(BookmarkRepository);
   });
 
   it('should be defined', () => {
