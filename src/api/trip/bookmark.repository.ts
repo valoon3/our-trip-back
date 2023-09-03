@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, EntityPropertyNotFoundError, Repository } from 'typeorm';
+import {
+  DeleteResult,
+  EntityPropertyNotFoundError,
+  QueryFailedError,
+  Repository,
+} from 'typeorm';
 import { Bookmark } from '../../db/entities/trip/bookmark.entity';
+import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 
 @Injectable()
 export class BookmarkRepository {
@@ -16,8 +22,6 @@ export class BookmarkRepository {
       .leftJoinAndSelect('bookmark.place', 'place')
       .where('bookmark.user = :userLoginId', { userLoginId })
       .getMany();
-
-    console.log(result);
 
     return result;
   }
@@ -43,35 +47,21 @@ export class BookmarkRepository {
     return result || false;
   }
 
-  // async createBookMark(userLoginId: number, placeResult: GoogleMapPlaceResult) {
-  //   const place = await this.placeRepository.upsert(
-  //     {
-  //       id: placeResult.place_id,
-  //       name: placeResult.name,
-  //       address: placeResult.formatted_address,
-  //       geometry_lat: placeResult.lat,
-  //       geometry_lng: placeResult.lng,
-  //       rating: placeResult.rating,
-  //       business_status: placeResult.business_status,
-  //       formatted_address: placeResult.formatted_address,
-  //       icon: placeResult.icon,
-  //       icon_background_color: placeResult.icon_background_color,
-  //       icon_mask_base_uri: placeResult.icon_mask_base_uri,
-  //       types: placeResult.types,
-  //       user_ratings_total: placeResult.user_ratings_total,
-  //     },
-  //     ['id'],
-  //   );
+  async create(userLoginId: number, placeResult: GoogleMapPlaceResult) {
+    try {
+      const bookmark = this.bookmarkRepository.create({
+        user: userLoginId,
+        place: placeResult.place_id,
+      });
 
-  //   const bookmark = this.bookmarkRepository.create({
-  //     user: userLoginId,
-  //     place: placeResult.place_id,
-  //   });
-  //
-  //   console.log(place);
-  //
-  //   return await this.bookmarkRepository.save(bookmark);
-  // }
+      return await this.bookmarkRepository.save(bookmark);
+    } catch (err) {
+      if (err instanceof QueryFailedError) {
+        throw err;
+      }
+      // console.error(err);
+    }
+  }
 
   async delete(
     userLoginId: number,
