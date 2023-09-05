@@ -28,14 +28,18 @@ export class TripService {
   }
 
   async createBookMark(userLoginId: number, placeResult: GoogleMapPlaceResult) {
-    const bookmark = await this.placeRepository.create(
+    // 먼저 장소에 대한 정보 추가
+    await this.placeRepository.create(placeResult);
+
+    // 북마크 추가
+    const bookmark = await this.bookmarkRepository.create(
       userLoginId,
-      placeResult,
+      placeResult.place_id,
     );
-    // const { user, ...result } = bookmark;
+    const { user, ...result } = bookmark;
 
     // return result;
-    return bookmark;
+    return result;
   }
 
   async deleteBookMark(

@@ -47,19 +47,24 @@ export class BookmarkRepository {
     return result || false;
   }
 
-  async create(userLoginId: number, placeResult: GoogleMapPlaceResult) {
-    try {
-      const bookmark = this.bookmarkRepository.create({
-        user: userLoginId,
-        place: placeResult.place_id,
-      });
+  async create(userLoginId: number, placeId: string): Promise<Bookmark> {
+    const bookmark = await this.bookmarkRepository.create({
+      user: userLoginId,
+      place: placeId,
+    });
+    return await this.bookmarkRepository.save(bookmark);
+  }
 
-      return await this.bookmarkRepository.save(bookmark);
+  async createByGoogleMapPlaceResult(
+    userLoginId: number,
+    placeResult: GoogleMapPlaceResult,
+  ): Promise<Bookmark> {
+    try {
+      return this.create(userLoginId, placeResult.place_id);
     } catch (err) {
       if (err instanceof QueryFailedError) {
         throw err;
       }
-      // console.error(err);
     }
   }
 

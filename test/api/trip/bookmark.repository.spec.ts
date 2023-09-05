@@ -95,14 +95,20 @@ describe('BookmarkRepository', () => {
     describe('create method', () => {
       test('외래키 place table 을 정의해주어야한다.', async () => {
         try {
-          await bookmarkRepository.create(1, createSample[1]);
+          await bookmarkRepository.createByGoogleMapPlaceResult(
+            1,
+            createSample[1],
+          );
         } catch (err) {
           expect(err).toBeInstanceOf(QueryFailedError);
         }
       });
 
       test('외래키가 있는 테스트', async () => {
-        await bookmarkRepository.create(1, createSample[0]);
+        await bookmarkRepository.createByGoogleMapPlaceResult(
+          1,
+          createSample[0],
+        );
       });
     });
   });
