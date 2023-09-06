@@ -60,11 +60,7 @@ export class TripController {
 
   // 북마크 삭제
   @Delete('/bookmark/:place_Id')
-  async deleteBookmark(
-    // @Body('placeResult') placeResult: google.maps.places.PlaceResult,
-    @Param('place_Id') place_Id: string,
-    @Req() req,
-  ) {
+  async deleteBookmark(@Param('place_Id') place_Id: string, @Req() req) {
     return this.tripService.deleteBookMark(req.user, place_Id);
   }
 
