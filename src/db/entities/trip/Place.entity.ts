@@ -21,7 +21,6 @@ export class Place {
   @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
   id: string;
 
-  // @PrimaryColumn()
   @Column()
   name?: string;
 

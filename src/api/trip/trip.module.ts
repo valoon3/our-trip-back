@@ -7,9 +7,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../../db/entities/User.entity';
 import { Bookmark } from '../../db/entities/trip/bookmark.entity';
 import { Place } from '../../db/entities/trip/Place.entity';
+import { Plan } from '../../db/entities/trip/plan.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Bookmark, Place])],
+  imports: [TypeOrmModule.forFeature([User, Bookmark, Place, Plan])],
   controllers: [TripController],
   providers: [TripService, BookmarkRepository, PlaceRepository],
 })

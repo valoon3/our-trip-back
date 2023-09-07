@@ -9,6 +9,10 @@ import globalConfig from './globalConfiguration';
 import { LoggerMiddleware } from './common/middlewares/Logger.middleware';
 import { TestController } from './api/test/test/test.controller';
 // import { TestServiceService } from './api/test-service/test-service.service';
+import { PlanModule } from './api/plan/plan.module';
+import { User } from './db/entities/User.entity';
+import { Bookmark } from './db/entities/trip/bookmark.entity';
+import { Place } from './db/entities/trip/Place.entity';
 
 @Module({
   imports: [
@@ -16,23 +20,11 @@ import { TestController } from './api/test/test/test.controller';
       isGlobal: true, // 전체적으로 사용하기 위해
       load: [globalConfig],
     }),
-    // TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: process.env.DATABASE_HOST,
-    //   port: Number(process.env.DATABASE_PORT),
-    //   username: process.env.DATABASE_USER,
-    //   database: process.env.DATABASE_NAME,
-    //   entities: ['dist/**/*.entity.{js,ts}'],
-    //   schema: process.env.DATABASE_SCHEMA,
-    //   autoLoadEntities: true,
-    //   logging: true,
-    //   synchronize: true,
-    // }),
     UserModule,
     AuthModule,
     TripModule,
+    PlanModule,
   ],
   // providers: [TestServiceService],
   controllers: [TestController],
