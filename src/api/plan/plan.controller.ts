@@ -6,23 +6,30 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { PlanService } from './plan.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/update-plan.dto';
+import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 
 @Controller('api/plan')
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
   @Post()
-  create(@Body() createPlanDto: CreatePlanDto) {
-    return this.planService.create(createPlanDto);
+  @UseGuards(JwtAuthGuard)
+  create(@Req() req: any, @Body() createPlanDto: CreatePlanDto) {
+    const user = req.user;
+    return this.planService.createPlan(user, createPlanDto);
   }
 
   @Get()
-  findAll() {
-    return this.planService.findAll();
+  @UseGuards(JwtAuthGuard)
+  findAll(@Req() req: any) {
+    const user = req.user;
+    return this.planService.findAllPlan(user);
   }
 
   @Get(':id')

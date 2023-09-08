@@ -1,17 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { Place } from '../../db/entities/trip/Place.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 
 @Injectable()
-export class PlaceRepository {
+export class PlaceRepository extends Repository<Place> {
   constructor(
+    dataSource: DataSource,
     @InjectRepository(Place)
     private placeRepository: Repository<Place>,
-  ) {}
+  ) {
+    super(Place, dataSource.createEntityManager());
+  }
 
-  async create(placeResult: GoogleMapPlaceResult) {
+  async createAndUpdate(placeResult: GoogleMapPlaceResult) {
     return await this.placeRepository.upsert(
       {
         id: placeResult.place_id || null,

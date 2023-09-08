@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Plan } from '../../db/entities/trip/plan.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { Place } from '../../db/entities/trip/Place.entity';
 
 @Injectable()
-export class PlanRepository {
-  constructor(
-    @InjectRepository(Plan)
-    private planEntity: Repository<Plan>,
-  ) {}
+export class PlanRepository extends Repository<Plan> {
+  constructor(private dataSource: DataSource) {
+    super(Plan, dataSource.createEntityManager());
+  }
+
+  async createPlan(user, place: Place) {
+    await super.delete({ user: user.id, place: place });
+  }
 }

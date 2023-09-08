@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '../../db/entities/User.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   UserInfo,
   CreateUserDto,
@@ -12,11 +12,14 @@ import * as bcrypt from 'bcrypt';
 import * as process from 'process';
 
 @Injectable()
-export class UserRepository {
+export class UserRepository extends Repository<User> {
   constructor(
+    private dataSource: DataSource,
     @InjectRepository(User)
     private userEntity: Repository<User>,
-  ) {}
+  ) {
+    super(User, dataSource.createEntityManager());
+  }
 
   async checkExistEmail(email: string): Promise<boolean> {
     return await this.userEntity.exist({

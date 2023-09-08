@@ -139,7 +139,7 @@ describe('PlaceRepository', () => {
       expect(result).not.toBeNull();
     });
     test('하나의 placeId 를 조회한 결과가 있다.', async () => {
-      await placeRepository.create(createSample);
+      await placeRepository.createAndUpdate(createSample);
       const result = await placeRepository.selectOne(createSample.place_id);
       console.log(result);
     });
@@ -151,13 +151,13 @@ describe('PlaceRepository', () => {
 
   describe('create and delete', () => {
     test('row 생성', async () => {
-      const result = await placeRepository.create(createSample);
+      const result = await placeRepository.createAndUpdate(createSample);
       console.log(result);
     });
 
     test('update', async () => {
       createSample.name = 'updatePlace';
-      await placeRepository.create(createSample);
+      await placeRepository.createAndUpdate(createSample);
       const result = await placeRepository.selectOne(createSample.place_id);
       expect(result.address).toBe(createSample.formatted_address);
       expect(result.geometry_lng).toBe(createSample.lng);
