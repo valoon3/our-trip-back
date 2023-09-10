@@ -44,6 +44,11 @@ describe('PlanController', () => {
   });
 
   describe('planRepository', () => {
+    test('join 결과', async () => {
+      const result = await planRepository.findAllPlan(1);
+      console.log(result);
+    });
+
     test('사용자의 계획이 없는 경우', async () => {
       const userId = {
         id: 0,
@@ -60,7 +65,7 @@ describe('PlanController', () => {
   describe('planService', () => {
     test('', async () => {});
 
-    describe('planService.createPlan', () => {
+    describe('createPlan', () => {
       test('해당 사람의 계획이 없는 경우', async () => {
         const spyfn = jest.spyOn(planRepository, 'findOne');
         const userId = {
