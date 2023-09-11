@@ -51,22 +51,29 @@ export class PlanService {
     return `This action returns a #${id} plan`;
   }
 
-  update(id: number, updatePlanDto: UpdatePlanDto) {
-    return `This action updates a #${id} plan`;
+  async updatePlanPriority(user, updatePlanDto: UpdatePlanDto[]) {
+    await this.planRepository.delete({
+      user: user.id,
+    });
+    const newPlanArray: Plan[] = updatePlanDto.map((plan) => ({
+      user: user.id,
+      place: plan.place_id,
+      priority: plan.priority,
+    }));
+
+    return this.planRepository.create(newPlanArray);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} plan`;
+  removePlan(user, plan: Plan) {
+    return this.planRepository.delete({
+      user: user.id,
+      priority: plan.priority,
+    });
   }
-
-  // private async placeCheck(createPlanDto: CreatePlanDto) {
-  //   const place = await this.placeRepository.createAndUpdate(createPlanDto);
-  //   console.log(place);
-  // }
 
   private placeCheck(plans: Plan[], targetPlaceId: string) {
     const existed = plans.find((plan) => {
-      if (plan.place.id === targetPlaceId) return true;
+      if (plan.place === targetPlaceId) return true;
     });
     return existed !== undefined;
   }

@@ -63,8 +63,6 @@ describe('PlanController', () => {
   });
 
   describe('planService', () => {
-    test('', async () => {});
-
     describe('createPlan', () => {
       test('해당 사람의 계획이 없는 경우', async () => {
         const spyfn = jest.spyOn(planRepository, 'findOne');
@@ -80,6 +78,15 @@ describe('PlanController', () => {
     describe('select', () => {
       test('findAllPlan', async () => {
         const result = await planService.findAllPlan({ id: 1 });
+        console.log(result);
+      });
+    });
+
+    describe('delete', () => {
+      test('removePlan', async () => {
+        const sampleUser = { id: 1 };
+        const selectAll = await planService.findAllPlan({ id: 1 });
+        const result = await planService.removePlan(sampleUser, selectAll[0]);
         console.log(result);
       });
     });

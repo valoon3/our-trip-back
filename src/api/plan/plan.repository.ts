@@ -10,7 +10,7 @@ export class PlanRepository extends Repository<Plan> {
   }
 
   async createPlan(user, place: Place) {
-    await super.delete({ user: user.id, place: place });
+    await super.delete({ user: user.id, place: place.id });
   }
 
   async findAllPlan(userId: number) {
