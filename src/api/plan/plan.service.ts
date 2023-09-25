@@ -14,7 +14,7 @@ export class PlanService {
     private readonly placeRepository: PlaceRepository,
   ) {}
 
-  async createPlan(user, createPlanDto: CreatePlanDto) {
+  async createPlan(user: any, createPlanDto: CreatePlanDto) {
     let lastPlanPriority = 1;
     try {
       // 전체 계획을 가져온다.

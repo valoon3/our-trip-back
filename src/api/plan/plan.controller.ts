@@ -22,10 +22,11 @@ export class PlanController {
   @UseGuards(JwtAuthGuard)
   create(@Req() req: any, @Body() createPlanDto: CreatePlanDto) {
     const user = req.user;
+    console.log(createPlanDto);
     return this.planService.createPlan(user, createPlanDto);
   }
 
-  @Get()
+  @Get('/')
   @UseGuards(JwtAuthGuard)
   findAll(@Req() req: any) {
     const user = req.user;
