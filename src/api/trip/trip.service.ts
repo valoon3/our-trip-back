@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { BookmarkRepository } from './bookmark.repository';
-import { User } from '../../db/entities/User.entity';
 import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 import { Place } from '../../db/entities/trip/Place.entity';
 import { PlaceRepository } from './place.repository';
+import { Bookmark } from '../../db/entities/trip/bookmark.entity';
 
 @Injectable()
 export class TripService {
@@ -28,11 +28,15 @@ export class TripService {
   }
 
   async createBookMark(userLoginId: number, placeResult: GoogleMapPlaceResult) {
+    try {
+      await this.placeRepository.createAndUpdate(placeResult);
+    } catch (err) {
+      console.error(err);
+    }
     // 먼저 장소에 대한 정보 추가
-    await this.placeRepository.createAndUpdate(placeResult);
 
     // 북마크 추가
-    const bookmark = await this.bookmarkRepository.create(
+    const bookmark = await this.bookmarkRepository.createBookmark(
       userLoginId,
       placeResult.place_id,
     );
@@ -47,6 +51,14 @@ export class TripService {
     placeId: string,
     // placeResult: google.maps.places.PlaceResult,
   ) {
-    return this.bookmarkRepository.delete(userLoginId, placeId);
+    const bookmark = await this.bookmarkRepository.find();
+
+    const deletedBookmark = await this.bookmarkRepository.delete({
+      user: userLoginId,
+      place: placeId,
+    });
+
+    console.log(deletedBookmark);
+    // return await this.bookmarkRepository.deleteBookmark(userLoginId, placeId);
   }
 }

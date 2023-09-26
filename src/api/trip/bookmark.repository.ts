@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  DataSource,
   DeleteResult,
-  EntityPropertyNotFoundError,
   QueryFailedError,
   Repository,
 } from 'typeorm';
@@ -10,11 +10,14 @@ import { Bookmark } from '../../db/entities/trip/bookmark.entity';
 import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 
 @Injectable()
-export class BookmarkRepository {
+export class BookmarkRepository extends Repository<Bookmark> {
   constructor(
     @InjectRepository(Bookmark)
     private bookmarkRepository: Repository<Bookmark>, // @InjectRepository(User) // private userRepository: Repository<User>, // @InjectRepository(Place) // private placeRepository: Repository<Place>,
-  ) {}
+    private dataSource: DataSource,
+  ) {
+    super(Bookmark, dataSource.createEntityManager());
+  }
 
   async getBookMarks(userLoginId: number): Promise<Bookmark[]> {
     const queryBuilder = this.bookmarkRepository.createQueryBuilder('bookmark');
@@ -47,7 +50,10 @@ export class BookmarkRepository {
     return result || false;
   }
 
-  async create(userLoginId: number, placeId: string): Promise<Bookmark> {
+  async createBookmark(
+    userLoginId: number,
+    placeId: string,
+  ): Promise<Bookmark> {
     const bookmark = await this.bookmarkRepository.create({
       user: userLoginId,
       place: placeId,
@@ -60,7 +66,7 @@ export class BookmarkRepository {
     placeResult: GoogleMapPlaceResult,
   ): Promise<Bookmark> {
     try {
-      return this.create(userLoginId, placeResult.place_id);
+      return this.createBookmark(userLoginId, placeResult.place_id);
     } catch (err) {
       if (err instanceof QueryFailedError) {
         throw err;
@@ -68,7 +74,7 @@ export class BookmarkRepository {
     }
   }
 
-  async delete(
+  async deleteBookmark(
     userLoginId: number,
     placeId: string,
     // placeResult: google.maps.places.PlaceResult,
