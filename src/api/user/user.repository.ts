@@ -50,10 +50,7 @@ export class UserRepository extends Repository<User> {
       where: { id: Number(userId) },
     });
 
-    if (user) {
-      const { password, ...result } = user;
-      return result;
-    }
+    if (user) return user;
 
     throw new NotFoundException('잘못된 로그인 정보입니다.', {
       cause: new Error(),

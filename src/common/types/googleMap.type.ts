@@ -11,7 +11,7 @@ export class GoogleMapPlaceResult {
   name?: string;
   isOpen?: boolean;
   // photos?: Array<>;
-  place_id?: string;
+  place_id: string;
   rating?: number;
   types?: Array<string>;
   user_ratings_total?: number;

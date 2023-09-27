@@ -21,7 +21,7 @@ export class TripController {
 
   // 북마크 조회
   @Get('/bookmarks')
-  async getBookmark(@Req() req): Promise<string[]> {
+  async getBookmark(@Req() req) {
     const userLoginInfo = req.user;
 
     // console.log(await this.tripService.getBookMark(userLoginInfo));

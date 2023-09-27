@@ -1,13 +1,8 @@
 import {
-  Column,
   Entity,
   Index,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
-  OneToMany,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../User.entity';
@@ -18,11 +13,14 @@ export class Bookmark {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // @JoinColumn({ name: 'place_id' })
+  // placeId: string;
+
   @Index()
   @ManyToOne(() => User, (User) => User.id)
   @JoinColumn({ name: 'user_id' })
-  user: number;
+  user: User;
 
   @ManyToOne(() => Place, (Place) => Place.id)
-  place: string;
+  place: Place;
 }

@@ -18,8 +18,10 @@ export class Place {
   // id: number;
   // @Column()
   @PrimaryColumn()
-  @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
   id: string;
+
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
+  bookmarks: Bookmark[];
 
   @Column()
   name?: string;

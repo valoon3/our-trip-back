@@ -49,39 +49,4 @@ export class BookmarkRepository extends Repository<Bookmark> {
 
     return result || false;
   }
-
-  async createBookmark(
-    userLoginId: number,
-    placeId: string,
-  ): Promise<Bookmark> {
-    const bookmark = await this.bookmarkRepository.create({
-      user: userLoginId,
-      place: placeId,
-    });
-    return await this.bookmarkRepository.save(bookmark);
-  }
-
-  async createByGoogleMapPlaceResult(
-    userLoginId: number,
-    placeResult: GoogleMapPlaceResult,
-  ): Promise<Bookmark> {
-    try {
-      return this.createBookmark(userLoginId, placeResult.place_id);
-    } catch (err) {
-      if (err instanceof QueryFailedError) {
-        throw err;
-      }
-    }
-  }
-
-  async deleteBookmark(
-    userLoginId: number,
-    placeId: string,
-    // placeResult: google.maps.places.PlaceResult,
-  ): Promise<DeleteResult> {
-    return this.bookmarkRepository.delete({
-      user: userLoginId,
-      place: placeId,
-    });
-  }
 }
