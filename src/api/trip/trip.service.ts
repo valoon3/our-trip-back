@@ -30,6 +30,7 @@ export class TripService {
     );
   }
 
+  // 북마크를 생성하고 북마크 목록을 다시 반환
   async createBookMark(user: User, placeResult: GoogleMapPlaceResult) {
     // 먼저 장소에 대한 정보 추가
     let place = await this.placeRepository.findOne({
@@ -64,6 +65,7 @@ export class TripService {
     return this.getBookMarks(user.id);
   }
 
+  // 북마크를 살제하고 갱신된 북마크 목록을 반환
   async deleteBookMark(
     user: User,
     placeId: string,

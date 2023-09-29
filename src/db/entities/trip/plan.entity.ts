@@ -26,3 +26,10 @@ export class Plan {
   @Column()
   priority: number;
 }
+
+/*
+ * 날짜
+ * 계획의 이름
+ * 장소
+ *
+ * */

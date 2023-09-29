@@ -15,19 +15,17 @@ import { UpdatePlanDto } from './dto/update-plan.dto';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 
 @Controller('api/plan')
+@UseGuards(JwtAuthGuard)
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   create(@Req() req: any, @Body() createPlanDto: CreatePlanDto) {
     const user = req.user;
-    console.log(createPlanDto);
     return this.planService.createPlan(user, createPlanDto);
   }
 
   @Get('/')
-  @UseGuards(JwtAuthGuard)
   findAll(@Req() req: any) {
     const user = req.user;
     return this.planService.findAllPlan(user);

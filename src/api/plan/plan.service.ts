@@ -77,4 +77,6 @@ export class PlanService {
     });
     return existed !== undefined;
   }
+
+  // 사용자의 계획 유형 가져오기
 }
