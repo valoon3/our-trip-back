@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToMany,
   ManyToOne,
@@ -19,11 +20,21 @@ export class Plan {
   @ManyToMany(() => User, (user) => user.id)
   user: User[];
 
-  @ManyToOne(() => Place, (place) => place.id)
+  @ManyToOne(() => Place, (place) => place.name)
   place?: Place;
 
   @Column()
-  priority: number;
+  @Index()
+  title: string; // 계획 제목
+
+  @Column({ nullable: true })
+  planDate: Date; // 계획 날짜
+
+  @Column({ default: false })
+  completed: boolean; // 완료 여부
+
+  @Column()
+  priority: number; // 우선 순위
 }
 
 /*
