@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Bookmark } from './bookmark.entity';
+import { Plan } from './plan.entity';
 
 @Entity({ name: 'places' })
 export class Place {
@@ -22,6 +23,9 @@ export class Place {
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
   bookmarks: Bookmark[];
+
+  @OneToMany(() => Plan, (plan) => plan.place)
+  plan: Plan[];
 
   @Column()
   name?: string;

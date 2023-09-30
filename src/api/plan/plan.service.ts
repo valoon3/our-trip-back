@@ -15,29 +15,7 @@ export class PlanService {
   ) {}
 
   async createPlan(user: any, createPlanDto: CreatePlanDto) {
-    let lastPlanPriority = 1;
-    try {
-      // 전체 계획을 가져온다.
-      const plans = await this.planRepository.findAllPlan(user.id);
-
-      if (plans.length > 0) lastPlanPriority = plans.length;
-
-      // 장소관련 정보 업데이트
-      const updatedPlace = await this.placeRepository.createAndUpdate(
-        createPlanDto,
-      );
-
-      // 요청 장소가 이미 계획에 있다면 추가하지 않는다.
-      if (!this.placeCheck(plans, createPlanDto.place_id)) {
-        return await this.planRepository.insert({
-          user: user.id,
-          place: updatedPlace.identifiers[0].id,
-          priority: lastPlanPriority,
-        });
-      }
-    } catch (err) {
-      if (err) console.error(err);
-    }
+    const lastPlanPriority = 1;
 
     return 'This action adds a new plan';
   }
@@ -69,13 +47,6 @@ export class PlanService {
       user: user.id,
       priority: plan.priority,
     });
-  }
-
-  private placeCheck(plans: Plan[], targetPlaceId: string) {
-    const existed = plans.find((plan) => {
-      if (plan.place === targetPlaceId) return true;
-    });
-    return existed !== undefined;
   }
 
   // 사용자의 계획 유형 가져오기

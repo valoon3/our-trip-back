@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryColumn,
@@ -13,15 +14,13 @@ import { User } from '../User.entity';
 @Entity()
 export class Plan {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToMany(() => User, (user) => user.id)
   user: User[];
 
-  @OneToOne(() => Place, (place) => place.id)
-  @JoinColumn()
-  // place: Place;
-  place: string;
+  @ManyToOne(() => Place, (place) => place.id)
+  place?: Place;
 
   @Column()
   priority: number;
