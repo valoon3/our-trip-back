@@ -8,18 +8,4 @@ export class PlanRepository extends Repository<Plan> {
   constructor(private dataSource: DataSource) {
     super(Plan, dataSource.createEntityManager());
   }
-
-  async createPlan(user, place: Place) {
-    await super.delete({ user: user.id, place: place.id });
-  }
-
-  async findAllPlan(userId: number) {
-    const result = await super
-      .createQueryBuilder('plan')
-      .orderBy('plan.priority', 'ASC')
-      .leftJoinAndSelect('plan.place', 'place')
-      .where('plan.user = :id', { id: userId })
-      .getMany();
-    return result;
-  }
 }

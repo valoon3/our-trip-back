@@ -17,7 +17,7 @@ export class PlaceRepository extends Repository<Place> {
   async createAndUpdate(placeResult: any) {
     return await this.placeRepository.upsert(
       {
-        id: placeResult.place_id || null,
+        id: placeResult.place_id || placeResult.id || null,
         name: placeResult.name || null,
         address: placeResult.formatted_address || null,
         geometry_lat: placeResult.lat || null,

@@ -4,12 +4,15 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  ManyToMany,
   OneToMany,
   UpdateDateColumn,
 } from 'typeorm';
 import { IsEmail, Length } from 'class-validator';
 import BaseEntity from './Entity';
 import { Bookmark } from './trip/bookmark.entity';
+import { Plan } from './trip/plan.entity';
+import { JoinTable } from 'typeorm/browser';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -32,4 +35,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmark: Bookmark[];
+
+  @ManyToMany(() => Plan, (Plan) => Plan.user)
+  plan: Plan[];
 }

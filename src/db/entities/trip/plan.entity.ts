@@ -1,16 +1,17 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   Index,
-  JoinColumn,
   ManyToMany,
   ManyToOne,
-  OneToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
+  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { Place } from './Place.entity';
 import { User } from '../User.entity';
+import { PlanDetail } from './planDetail';
 
 @Entity()
 export class Plan {
@@ -18,23 +19,24 @@ export class Plan {
   id: number;
 
   @ManyToMany(() => User, (user) => user.id)
+  @JoinTable()
   user: User[];
 
-  @ManyToOne(() => Place, (place) => place.name)
-  place?: Place;
+  @OneToMany(() => PlanDetail, (planDetail) => planDetail.title)
+  planDetail?: PlanDetail[];
 
   @Column()
   @Index()
   title: string; // 계획 제목
 
   @Column({ nullable: true })
-  planDate: Date; // 계획 날짜
-
-  @Column({ default: false })
-  completed: boolean; // 완료 여부
+  planDate: Date; // 계획 생성 날짜
 
   @Column()
-  priority: number; // 우선 순위
+  startPlanDate?: Date; // 계획 시작 날짜
+
+  @Column()
+  endPlanDate?: Date; // 계획 끝 날짜
 }
 
 /*

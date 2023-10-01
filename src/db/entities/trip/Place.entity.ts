@@ -1,31 +1,17 @@
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Double,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Bookmark } from './bookmark.entity';
-import { Plan } from './plan.entity';
+import { PlanDetail } from './planDetail';
 
 @Entity({ name: 'places' })
 export class Place {
-  // @PrimaryGeneratedColumn()
-  // id: number;
-  // @Column()
   @PrimaryColumn()
   id: string;
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
   bookmarks: Bookmark[];
 
-  @OneToMany(() => Plan, (plan) => plan.place)
-  plan: Plan[];
+  @OneToMany(() => PlanDetail, (PlanDetail) => PlanDetail.place)
+  planDetail: PlanDetail[];
 
   @Column()
   name?: string;
