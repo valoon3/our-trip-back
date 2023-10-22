@@ -19,8 +19,8 @@ import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
-  @Post()
-  create(@Req() req: any, @Body() createPlanDto: CreatePlanDto) {
+  @Post('/')
+  createPlan(@Req() req: any, @Body() createPlanDto: CreatePlanDto) {
     const user = req.user;
     return this.planService.createPlan(user, createPlanDto);
   }

@@ -12,6 +12,7 @@ import {
   Inject,
   forwardRef,
   Req,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
@@ -22,6 +23,7 @@ import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto } from '../auth/dto/login.request.dto';
 import { CurrentUser } from '../../common/decorators/user.decorator';
+import { LoggingInterceptor } from '../../common/interceptor/logging.interceptor';
 
 @Controller('api/user')
 export class UserController {
@@ -64,30 +66,10 @@ export class UserController {
     return res.status(200).send('logout success');
   }
 
-  // // jwt 테스트
-  // @UseGuards(JwtAuthGuard)
-  // @Post('/test')
-  // async test(@CurrentUser() user) {
-  //   return user;
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.userService.findAll();
-  // }
-  //
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userService.findOne(+id);
-  // }
-  //
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
-  //
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
+  @Get('/testinterceptor')
+  @UseInterceptors(LoggingInterceptor)
+  testInterceptor() {
+    console.log('test interceptor 시작');
+    return;
+  }
 }
