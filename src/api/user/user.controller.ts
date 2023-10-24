@@ -13,19 +13,19 @@ import {
   forwardRef,
   Req,
   UseInterceptors,
+  UseFilters,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto } from '../auth/dto/login.request.dto';
-import { CurrentUser } from '../../common/decorators/user.decorator';
 import { LoggingInterceptor } from '../../common/interceptor/logging.interceptor';
+import { HttpExceptionFilter } from '../../common/exceptions/http-exception.filter';
 
 @Controller('api/user')
+@UseFilters(HttpExceptionFilter)
 export class UserController {
   constructor(
     private readonly userService: UserService,

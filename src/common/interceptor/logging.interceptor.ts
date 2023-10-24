@@ -14,7 +14,7 @@ export class LoggingInterceptor implements NestInterceptor {
     const now = Date.now();
 
     const args = context.getArgs();
-    const rawHeaders: [] = args[0].rawHeaders;
+    const rawHeaders: string[] = args[0].rawHeaders;
 
     console.log(rawHeaders);
 
