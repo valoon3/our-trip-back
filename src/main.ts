@@ -16,7 +16,11 @@ async function bootstrap() {
     origin: true,
     credentials: true,
   });
-  const port = 8080;
+  let port = 8080;
+
+  if (process.env.NODE_ENV === 'production') {
+    port = Number(process.env.PORT);
+  }
 
   await app.listen(port).then(() => {
     console.log(`waiting in ${port}!!!`);
