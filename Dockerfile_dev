@@ -1,11 +1,22 @@
-FROM node:20-alpine
+#FROM node:20-alpine
+#
+#WORKDIR /Users/nabyeongho/Desktop/self_study/our-trip/our-trip-back
+#
+#COPY ./package.json ./
+#
+#RUN npm install
+#
+#COPY ./ ./
+#
+#CMD ["npm", "run", "start"]
 
-WORKDIR /app
+FROM diamol/node
 
-COPY ./package.json ./
+ENV TARGET="blog.sixeyed.com"
+ENV method="HEAD"
+ENV INTERVAL="3000"
 
-RUN npm install
+WORKDIR /web-ping
+COPY app.js .
 
-COPY ./ ./
-
-CMD ["npm", "run", "start"]
+CMD ["node", "/web-ping/app.js"]
