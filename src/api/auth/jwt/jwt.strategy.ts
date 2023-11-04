@@ -9,6 +9,8 @@ const cookieExtractor = function (req) {
   let token = null;
   if (req && req.cookies['token']) {
     token = req.cookies['token'] || req.header;
+  } else {
+    return new Error('No JWT found');
   }
   return token;
 };
