@@ -10,13 +10,17 @@
 #
 #CMD ["npm", "run", "start"]
 
-FROM diamol/node
+# ====================
 
-ENV TARGET="blog.sixeyed.com"
-ENV method="HEAD"
-ENV INTERVAL="3000"
+#FROM diamol/node
+#
+#ENV TARGET="blog.sixeyed.com"
+#ENV method="HEAD"
+#ENV INTERVAL="3000"
+#
+#WORKDIR /web-ping
+#COPY app.js .
 
-WORKDIR /web-ping
-COPY app.js .
+#CMD ["node", "/web-ping/app.js"]
 
-CMD ["node", "/web-ping/app.js"]
+WORKDIR /usr
