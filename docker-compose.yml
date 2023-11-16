@@ -1,0 +1,37 @@
+version: "3"
+services:
+  backend:
+    container_name: our-trip-backend
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8080:8080"
+    stdin_open: true
+    depends_on:
+      - postgres
+#    networks:
+#      - web-net
+
+  postgres:
+    image: postgres:14.7
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      PG_HOST: postgres
+      PG_SCHEMA: our-trip
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_SCHEMA}
+
+
+    volumes:
+      - ./data:/var/lib/postgresql/data
+#    networks:
+#      - web-net
+volumes:
+  data:
+#networks:
+#  web-net:

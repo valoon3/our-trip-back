@@ -10,18 +10,20 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   private readonly config: ConfigService;
 
   public createTypeOrmOptions(): TypeOrmModuleOptions {
-    // const isDev: boolean = this.config.get('MODE') === 'dev' ? true : false;
-    // const isDev: LoggerOptions = ['query', 'error'];
     const isDev: LoggerOptions = true;
 
     return {
       type: 'postgres',
-      host: this.config.get<string>('DATABASE_HOST'),
+      // host: process.env.PG_HOST,
+      host: 'postgres',
+        // process.env.NODE_ENV === 'production'
+        //   ? process.env.DOCKER_DB_CONTAINER_NAME
+        //   : this.config.get<string>('DATABASE_HOST'),
       port: this.config.get<number>('DATABASE_PORT'),
       database: this.config.get<string>('DATABASE_NAME'),
       username: this.config.get<string>('DATABASE_USER'),
-      schema: this.config.get<string>('DATABASE_SCHEMA'),
-      // password: this.config.get<string>('DATABASE_PASSWORD'),
+      schema: this.config.get<string>('PG_SCHEMA'),
+      password: this.config.get<string>('DATABASE_PASSWORD'),
       entities: ['dist/**/*.entity.{ts,js}'],
       autoLoadEntities: true,
       // migrations: ['dist/migrations/*.{ts,js}'],
