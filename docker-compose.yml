@@ -20,12 +20,12 @@ services:
     ports:
       - "5432:5432"
     environment:
+      NODE_ENV: production
       PG_HOST: postgres
       PG_SCHEMA: our-trip
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_SCHEMA}
-
 
     volumes:
       - ./data:/var/lib/postgresql/data

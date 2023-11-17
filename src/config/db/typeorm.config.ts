@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { LoggerOptions } from 'typeorm';
-import * as process from 'process';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -12,13 +11,31 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   public createTypeOrmOptions(): TypeOrmModuleOptions {
     const isDev: LoggerOptions = true;
 
+    // production
+    if (process.env.NODE_ENV === 'production') {
+      return {
+        type: 'postgres',
+        // host: process.env.PG_HOST,
+        host: 'postgres',
+        port: this.config.get<number>('DATABASE_PORT'),
+        database: this.config.get<string>('DATABASE_NAME'),
+        username: this.config.get<string>('DATABASE_USER'),
+        schema: this.config.get<string>('PG_SCHEMA'),
+        password: this.config.get<string>('DATABASE_PASSWORD'),
+        entities: ['dist/**/*.entity.{ts,js}'],
+        autoLoadEntities: true,
+        // migrations: ['dist/migrations/*.{ts,js}'],
+        // migrationsTableName: 'typeorm_migrations',
+        // logger: 'file',
+        logging: isDev,
+        synchronize: true, // never use TRUE in production!
+      };
+    }
+
+    // local
     return {
       type: 'postgres',
-      // host: process.env.PG_HOST,
-      host: 'postgres',
-        // process.env.NODE_ENV === 'production'
-        //   ? process.env.DOCKER_DB_CONTAINER_NAME
-        //   : this.config.get<string>('DATABASE_HOST'),
+      host: '127.0.0.1',
       port: this.config.get<number>('DATABASE_PORT'),
       database: this.config.get<string>('DATABASE_NAME'),
       username: this.config.get<string>('DATABASE_USER'),
