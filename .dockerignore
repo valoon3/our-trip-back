@@ -1,0 +1,7 @@
+example/hello.txt
+.git
+.svn
+.dist
+.idea
+test
+node_modules

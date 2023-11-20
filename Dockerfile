@@ -1,17 +1,19 @@
-
-
 FROM node:20-alpine
+#FROM node:20
 
-#WORKDIR /app
-WORKDIR /our-trip/our-trip-back
+WORKDIR /app
+#WORKDIR /our-trip/our-trip-back
 
+ENV NODE_ENV=production
+
+COPY ./package.json ./
+#
 RUN npm install -g pm2
-COPY ./package.json .
 RUN npm install
-COPY . .
-RUN npm run build
-#COPY ./.env ./
+RUN npm install @nestjs/cli -g
 
-#COPY ./ ./
+COPY ./ ./
+
+RUN npm run build
 
 CMD ["npm", "run", "start:prod"]

@@ -11,6 +11,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   public createTypeOrmOptions(): TypeOrmModuleOptions {
     const isDev: LoggerOptions = true;
 
+    console.log(process.env.NODE_ENV);
+
     // production
     if (process.env.NODE_ENV === 'production') {
       return {
