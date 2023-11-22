@@ -15,7 +15,7 @@ async function bootstrap() {
     .setTitle('Our-trip-back API')
     .setDescription('Our-trip-back API')
     .setVersion('1.0')
-    .addTag('tag')
+    // .addTag('tag')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('/swagger', app, document);

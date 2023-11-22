@@ -23,9 +23,11 @@ import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto } from '../auth/dto/login.request.dto';
 import { LoggingInterceptor } from '../../common/interceptor/logging.interceptor';
 import { HttpExceptionFilter } from '../../common/exceptions/http-exception.filter';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/user')
 @UseFilters(HttpExceptionFilter)
+@ApiTags('user controller api')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -35,6 +37,11 @@ export class UserController {
 
   // 회원가입
   @Post('/signup')
+  @ApiOperation({ summary: '회원가입', description: '회원가입 API' })
+  @ApiCreatedResponse({
+    description: '유저를 생성한다.',
+    status: HttpStatus.CREATED,
+  })
   signup(@Body() createUserDto: CreateUserDto) {
     return this.userService.signup(createUserDto);
   }
