@@ -14,6 +14,7 @@ import {
   Req,
   UseInterceptors,
   UseFilters,
+  HttpCode,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
@@ -23,7 +24,13 @@ import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto } from '../auth/dto/login.request.dto';
 import { LoggingInterceptor } from '../../common/interceptor/logging.interceptor';
 import { HttpExceptionFilter } from '../../common/exceptions/http-exception.filter';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller('api/user')
 @UseFilters(HttpExceptionFilter)
@@ -38,9 +45,18 @@ export class UserController {
   // 회원가입
   @Post('/signup')
   @ApiOperation({ summary: '회원가입', description: '회원가입 API' })
-  @ApiCreatedResponse({
+  @ApiResponse({
     description: '유저를 생성한다.',
     status: HttpStatus.CREATED,
+  })
+  @ApiResponse({
+    description: '이메일이 이미 존재하는 경우.',
+    status: HttpStatus.CONFLICT,
+  })
+  @HttpCode(HttpStatus.CREATED)
+  @ApiParam({
+    name: 'createUserDto',
+    type: CreateUserDto,
   })
   signup(@Body() createUserDto: CreateUserDto) {
     return this.userService.signup(createUserDto);
@@ -49,6 +65,8 @@ export class UserController {
   // 로그인
   @Post('/signin')
   // @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '로그인', description: '로그인 API' })
   async signin(@Res() res, @Body() loginRequestDto: LoginRequestDto) {
     return await this.userService.signin(loginRequestDto, res);
   }
