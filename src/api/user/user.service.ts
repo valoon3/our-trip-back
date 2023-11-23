@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   forwardRef,
   Inject,
   Injectable,
@@ -29,12 +30,10 @@ export class UserService {
 
     if (userExist) {
       // TODO : exception filter 사용하기
-      // throw new BadRequestException('email is exist!', {
-      //   cause: new Error(),
-      //   description: 'Some error description',
-      // });
-      errors.emailError = 'email is exist!';
-      return errors;
+      throw new ConflictException('email is exist!', {
+        cause: new Error(),
+        description: 'email is exist',
+      });
     }
 
     const { password, ...result } = await this.userRepository.createUser(
