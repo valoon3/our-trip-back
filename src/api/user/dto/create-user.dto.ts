@@ -1,23 +1,8 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { ApiParam, ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { LoginUserDto } from './login-user.dto';
 
-export class CreateUserDto {
-  @IsEmail()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'email',
-    default: 'admin@gmail.com',
-  })
-  email: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'password',
-    default: 'admin',
-  })
-  password: string;
-
+export class CreateUserDto extends LoginUserDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({

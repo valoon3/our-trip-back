@@ -1,15 +1,22 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from '../../db/entities/User.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import {
-  UserInfo,
-  CreateUserDto,
-  LoginUserDto,
-  LoginResult,
-} from '../../common/types/UserInfo.type';
+// import {
+//   UserInfo,
+//   CreateUserDto,
+//   LoginUserDto,
+//   LoginResult,
+// } from '../../common/types/UserInfo.type';
+import { LoginResultDto } from './dto/login-result.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import * as process from 'process';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UserRepository extends Repository<User> {
@@ -77,8 +84,8 @@ export class UserRepository extends Repository<User> {
   async validateUserInfo({
     email,
     password,
-  }: LoginUserDto): Promise<LoginResult> {
-    const loginResult: LoginResult = {
+  }: LoginUserDto): Promise<LoginResultDto> {
+    const loginResult: LoginResultDto = {
       loginError: false,
     };
 
@@ -97,7 +104,7 @@ export class UserRepository extends Repository<User> {
 
       loginResult.userInfo = {
         name: user.name,
-        password: user.password,
+        // password: user.password,
         email: user.email,
       };
     } catch (err) {

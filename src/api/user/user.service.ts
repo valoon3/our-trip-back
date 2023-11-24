@@ -12,7 +12,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
 import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
-import { LoginResult, LoginUserDto } from '../../common/types/UserInfo.type';
+import { LoginUserDto } from './dto/login-user.dto';
+import { LoginResultDto } from './dto/login-result.dto';
 
 @Injectable()
 export class UserService {
@@ -26,10 +27,7 @@ export class UserService {
       createUserDto.email,
     );
 
-    const errors: any = {};
-
     if (userExist) {
-      // TODO : exception filter 사용하기
       throw new ConflictException('email is exist!', {
         cause: new Error(),
         description: 'email is exist',
@@ -47,6 +45,11 @@ export class UserService {
     const loginResult = await this.userRepository.validateUserInfo(
       loginUserDto,
     );
+
+    // throw new ConflictException('email is exist!', {
+    //   cause: new Error(),
+    //   description: 'email is exist',
+    // });
 
     if (loginResult.loginError) {
       return res.status(203).json(loginResult);

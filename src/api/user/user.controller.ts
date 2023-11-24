@@ -66,6 +66,10 @@ export class UserController {
   @Post('/signin')
   // @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    description: '정상적인 로그인',
+    status: HttpStatus.OK,
+  })
   @ApiOperation({ summary: '로그인', description: '로그인 API' })
   async signin(@Res() res, @Body() loginRequestDto: LoginRequestDto) {
     return await this.userService.signin(loginRequestDto, res);
