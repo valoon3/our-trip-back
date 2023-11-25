@@ -3,6 +3,7 @@ import {
   Body,
   ConflictException,
   forwardRef,
+  HttpStatus,
   Inject,
   Injectable,
   Res,
@@ -14,6 +15,7 @@ import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LoginResultDto } from './dto/login-result.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -28,7 +30,7 @@ export class UserService {
     );
 
     if (userExist) {
-      throw new ConflictException('email is exist!', {
+      throw new BadRequestException('email is exist!', {
         cause: new Error(),
         description: 'email is exist',
       });
@@ -42,14 +44,33 @@ export class UserService {
   }
 
   async signin(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
-    const loginResult = await this.userRepository.validateUserInfo(
-      loginUserDto,
+    const loginResult = new LoginResultDto();
+
+    const user = await this.userRepository.findOneByUserEmail(
+      loginUserDto.email,
     );
 
-    // throw new ConflictException('email is exist!', {
-    //   cause: new Error(),
-    //   description: 'email is exist',
-    // });
+    if (!user) {
+      throw new ConflictException('email is exist!', {
+        cause: new Error(),
+        description: 'email is exist',
+      });
+    } else {
+      loginResult.userInfo = user;
+    }
+
+    // const hashedPassword = await this.userRepository.passwordHashed(
+    //   user.password,
+    // );
+
+    if (!bcrypt.compare(loginUserDto.password, user.password)) {
+      throw new BadRequestException('비밀번호가 일치하지 않습니다.', {
+        cause: new Error(),
+        description: 'password error',
+      });
+    } else {
+      loginResult.loginError = false;
+    }
 
     if (loginResult.loginError) {
       return res.status(203).json(loginResult);

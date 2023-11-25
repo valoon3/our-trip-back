@@ -29,9 +29,21 @@ export class UserRepository extends Repository<User> {
   }
 
   async checkExistEmail(email: string): Promise<boolean> {
-    return await this.userEntity.exist({
+    const user = await this.userEntity.exist({
       where: { email },
     });
+
+    if (user) {
+      return user;
+    }
+
+    throw new NotFoundException(
+      '해당 이메일이 존재하지 않습니다. 이메일을 확인해 주세요.',
+      {
+        cause: new Error(),
+        description: '해당 이메일이 존재하지 않습니다.',
+      },
+    );
   }
 
   async findOneByUserEmail(email: string): Promise<User> {
@@ -81,39 +93,29 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  async validateUserInfo({
-    email,
-    password,
-  }: LoginUserDto): Promise<LoginResultDto> {
-    const loginResult: LoginResultDto = {
-      loginError: false,
-    };
-
-    try {
-      const user = await this.findOneByUserEmail(email);
-
-      if (!user) {
-        throw new Error('해당 이메일이 존재하지 않습니다.');
-      }
-
-      // const hashedPassword = await this.passwordHashed(password);
-
-      if (!bcrypt.compare(password, user.password)) {
-        throw new Error('비밀번호가 일치하지 않습니다.');
-      }
-
-      loginResult.userInfo = {
-        name: user.name,
-        // password: user.password,
-        email: user.email,
-      };
-    } catch (err) {
-      loginResult.loginError = true;
-      loginResult.errorMessage = err.message;
-    }
-
-    return loginResult;
-  }
+  // async validateUserInfo({
+  //   email,
+  //   password,
+  // }: LoginUserDto): Promise<LoginUserDto> {
+  //   // const loginResult: LoginResultDto = {
+  //   //   loginError: false,
+  //   // };
+  //
+  //   try {
+  //     const user = await this.findOneByUserEmail(email);
+  //
+  //     loginResult.userInfo = {
+  //       name: user.name,
+  //       // password: user.password,
+  //       email: user.email,
+  //     };
+  //   } catch (err) {
+  //     loginResult.loginError = true;
+  //     loginResult.errorMessage = err.message;
+  //   }
+  //
+  //   return loginResult;
+  // }
 
   async fineAll(): Promise<any> {
     const result = await this.userEntity.find();
@@ -121,7 +123,7 @@ export class UserRepository extends Repository<User> {
     return result;
   }
 
-  private async passwordHashed(password: string): Promise<string> {
+  async passwordHashed(password: string): Promise<string> {
     console.log(`${process.env.HASH_KEY}`);
     const hashedPassword = await bcrypt.hash(
       password,

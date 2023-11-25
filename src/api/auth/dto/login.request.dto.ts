@@ -9,6 +9,7 @@ export class LoginRequestDto {
     default: 'admin@gmail.com',
   })
   email: string;
+
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
