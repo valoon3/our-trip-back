@@ -51,10 +51,12 @@ export class UserService {
     );
 
     if (!user) {
-      throw new ConflictException('email is exist!', {
-        cause: new Error(),
-        description: 'email is exist',
-      });
+      // throw new ConflictException('email is exist!', {
+      //   cause: new Error(),
+      //   description: 'email is exist',
+      // });
+      loginResult.loginError = '아이디가 일치하지 않습니다.';
+      return res.status(203).json(loginResult);
     } else {
       loginResult.userInfo = user;
     }
@@ -64,17 +66,16 @@ export class UserService {
     // );
 
     if (!bcrypt.compare(loginUserDto.password, user.password)) {
-      throw new BadRequestException('비밀번호가 일치하지 않습니다.', {
-        cause: new Error(),
-        description: 'password error',
-      });
+      // throw new BadRequestException('비밀번호가 일치하지 않습니다.', {
+      //   cause: new Error(),
+      //   description: 'password error',
+      // });
+      loginResult.loginError = '비밀번호가 일치하지 않습니다.';
+      return res.status(203).json(loginResult);
     } else {
       loginResult.loginError = false;
     }
 
-    if (loginResult.loginError) {
-      return res.status(203).json(loginResult);
-    }
     const token = await this.authService.createToken(loginUserDto);
 
     // 쿠키를 헤더에 포함시키기
@@ -82,7 +83,8 @@ export class UserService {
     return res
       .cookie('token', /*'Bearer ' + */ token, {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000, //1 day
+        // maxAge: 24 * 60 * 60 * 1000, //1 day
+        maxAge: 24 * 60 * 60 * 1000 * 7, //7 day
         path: '/',
       })
       .header('')
