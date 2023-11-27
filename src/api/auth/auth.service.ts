@@ -42,7 +42,7 @@ export class AuthService {
     if (password.length === 0)
       errors.passwordError = '비밀번호를 입력해주세요.';
 
-    if (Object.keys(errors).length > 0) throw new BadRequestException(errors);
+    if (Object.keys(errors).length > 0) throw new UnauthorizedException(errors);
   }
 
   private async verifyPassword(

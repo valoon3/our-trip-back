@@ -71,16 +71,34 @@ export class UserController {
     status: HttpStatus.OK,
   })
   @ApiOperation({ summary: '로그인', description: '로그인 API' })
+  @ApiParam({
+    name: 'loginRequestDto',
+    type: LoginRequestDto,
+  })
+  @ApiResponse({
+    description: '정상적인 로그인.',
+    status: HttpStatus.OK,
+  })
+  @ApiResponse({
+    description: '로그인 정보가 잘못된 경우.',
+    status: HttpStatus.UNAUTHORIZED,
+  })
   async signin(@Res() res, @Body() loginRequestDto: LoginRequestDto) {
     return await this.userService.signin(loginRequestDto, res);
   }
 
   @Post('/info')
   @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    description: '정상적인 정보 조회',
+    status: HttpStatus.OK,
+  })
   async getInfo(@Req() req: any, @Res() res) {
     const userInfo = req.user;
+    const result = { name: userInfo.name, email: userInfo.email };
 
-    res.status(200).send(userInfo);
+    res.status(200).send(result);
   }
 
   // @UseGuards(JwtAuthGuard)

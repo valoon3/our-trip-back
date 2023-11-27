@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { User } from '../../db/entities/User.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -55,7 +56,7 @@ export class UserRepository extends Repository<User> {
       return user;
     }
 
-    throw new NotFoundException({
+    throw new UnauthorizedException({
       emailError: '해당 이메일이 존재하지 않습니다. 이메일을 확인해 주세요.',
     });
   }
