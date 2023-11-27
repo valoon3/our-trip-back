@@ -46,37 +46,15 @@ export class UserService {
   async signin(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
     const loginResult = new LoginResultDto();
 
+    const token = await this.authService.createToken(loginUserDto);
+
     const user = await this.userRepository.findOneByUserEmail(
       loginUserDto.email,
     );
 
-    if (!user) {
-      // throw new ConflictException('email is exist!', {
-      //   cause: new Error(),
-      //   description: 'email is exist',
-      // });
-      loginResult.loginError = '아이디가 일치하지 않습니다.';
-      return res.status(203).json(loginResult);
-    } else {
-      loginResult.userInfo = user;
-    }
-
-    // const hashedPassword = await this.userRepository.passwordHashed(
-    //   user.password,
-    // );
-
-    if (!bcrypt.compare(loginUserDto.password, user.password)) {
-      // throw new BadRequestException('비밀번호가 일치하지 않습니다.', {
-      //   cause: new Error(),
-      //   description: 'password error',
-      // });
-      loginResult.loginError = '비밀번호가 일치하지 않습니다.';
-      return res.status(203).json(loginResult);
-    } else {
-      loginResult.loginError = false;
-    }
-
-    const token = await this.authService.createToken(loginUserDto);
+    loginResult.email = user.email;
+    loginResult.name = user.name;
+    loginResult.loginError = false;
 
     // 쿠키를 헤더에 포함시키기
     // res.setHeader('Set-Cookie', 'Bearer ' + token);

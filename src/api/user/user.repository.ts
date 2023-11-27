@@ -55,13 +55,9 @@ export class UserRepository extends Repository<User> {
       return user;
     }
 
-    throw new NotFoundException(
-      '해당 이메일이 존재하지 않습니다. 이메일을 확인해 주세요.',
-      {
-        cause: new Error(),
-        description: '해당 이메일이 존재하지 않습니다.',
-      },
-    );
+    throw new NotFoundException({
+      emailError: '해당 이메일이 존재하지 않습니다. 이메일을 확인해 주세요.',
+    });
   }
 
   async findOneByUserId(userId: string) {

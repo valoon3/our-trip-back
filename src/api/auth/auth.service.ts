@@ -52,9 +52,8 @@ export class AuthService {
     const isPasswordValidated = await bcrypt.compare(password, hashedPassword);
 
     if (!isPasswordValidated) {
-      throw new UnauthorizedException('이메일과 비밀번호를 다시 확인해주세요', {
-        cause: new Error(),
-        description: '이메일과 비밀번호를 확인해주세요.',
+      throw new UnauthorizedException({
+        passwordError: '이메일과 비밀번호를 다시 확인해주세요',
       });
     }
 
