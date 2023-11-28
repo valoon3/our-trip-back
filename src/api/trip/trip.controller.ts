@@ -3,9 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Req,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { TripService } from './trip.service';
@@ -13,14 +16,27 @@ import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { User } from '../../db/entities/User.entity';
 import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 import { Place } from '../../db/entities/trip/Place.entity';
+import { HttpExceptionFilter } from '../../common/exceptions/http-exception.filter';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('api/trip')
 @UseGuards(JwtAuthGuard)
+@UseFilters(HttpExceptionFilter)
+@ApiTags('trip controller api')
 export class TripController {
   constructor(private readonly tripService: TripService) {}
 
-  // 북마크 조회
   @Get('/bookmarks')
+  @ApiOperation({ summary: '북마크 조회', description: '북마크 조회 API' })
+  @ApiResponse({
+    description: '북마크를 조회 성공.',
+    status: HttpStatus.OK,
+  })
+  @ApiResponse({
+    description: '북마크를 조회실패.',
+    status: HttpStatus.CONFLICT,
+  })
+  @HttpCode(HttpStatus.OK)
   async getBookmark(@Req() req) {
     const userLoginInfo = req.user;
 
@@ -28,6 +44,7 @@ export class TripController {
 
     return this.tripService.getBookMarks(userLoginInfo.id);
   }
+  // 북마크 조회
 
   // @Get('/bookmarks')
 
