@@ -20,14 +20,19 @@ export class TripService {
     return bookmarks.map((bookmark) => bookmark.place);
   }
 
-  async getBookMarkByOne(
-    userLoginId: number,
-    placeId: string,
-  ): Promise<boolean> {
-    return await this.bookmarkRepository.getBookMarkByPlaceId(
-      userLoginId,
-      placeId,
-    );
+  async getBookMarkByOne(userLoginId: User, placeId: string): Promise<boolean> {
+    const result = await this.bookmarkRepository.find({
+      where: {
+        user: {
+          id: userLoginId.id,
+        },
+        place: {
+          id: placeId,
+        },
+      },
+    });
+
+    return result.length ? true : false;
   }
 
   // 북마크를 생성하고 북마크 목록을 다시 반환

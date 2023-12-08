@@ -36,13 +36,17 @@ export class BookmarkRepository extends Repository<Bookmark> {
     let result;
 
     try {
+      const result = await this.bookmarkRepository.find();
+
+      console.log(result);
+
       const find = await this.bookmarkRepository
         .createQueryBuilder('bookmark')
         .where('bookmark.user = :userLoginId', { userLoginId })
         .andWhere('bookmark.place = :placeId', { placeId })
         .getOne();
 
-      if (find !== null) result = true;
+      // if (find !== null) result = true;
     } catch (err) {
       console.error(err);
     }
