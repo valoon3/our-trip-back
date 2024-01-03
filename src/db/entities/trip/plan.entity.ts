@@ -33,10 +33,10 @@ export class Plan {
   planDate: Date; // 계획 생성 날짜
 
   @Column()
-  startPlanDate?: Date; // 계획 시작 날짜
+  startDate?: Date; // 계획 시작 날짜
 
   @Column()
-  endPlanDate?: Date; // 계획 끝 날짜
+  endDate?: Date; // 계획 끝 날짜
 }
 
 /*

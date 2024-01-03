@@ -28,8 +28,8 @@ export class PlanService {
 
     const plan = this.planRepository.create({
       title: createPlanDto.title,
-      startPlanDate: createPlanDto.startPlanDate,
-      endPlanDate: createPlanDto.endPlanDate,
+      startDate: createPlanDto.startDate,
+      endDate: createPlanDto.endDate,
     });
     await this.planRepository.save(plan);
 
