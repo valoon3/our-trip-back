@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   JoinTable,
   OneToMany,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Place } from './Place.entity';
 import { User } from '../User.entity';
@@ -29,8 +30,11 @@ export class Plan {
   @Index()
   title: string; // 계획 제목
 
-  @Column({ nullable: true })
-  planDate: Date; // 계획 생성 날짜
+  @CreateDateColumn({ nullable: true })
+  createDate: Date; // 계획 생성 날짜
+
+  @UpdateDateColumn({ nullable: true })
+  updateDate: Date; // 계획 생성 날짜
 
   @Column()
   startDate?: Date; // 계획 시작 날짜

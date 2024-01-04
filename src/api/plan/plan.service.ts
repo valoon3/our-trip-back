@@ -21,10 +21,10 @@ export class PlanService {
     const plans = await this.findAllPlan(user);
     const exist = plans.find((plan) => plan.title === createPlanDto.title);
 
-    if (exist)
-      return {
-        message: '이미 존재하는 계획입니다.',
-      };
+    // if (exist)
+    //   return {
+    //     message: '이미 존재하는 계획입니다.',
+    //   };
 
     const plan = this.planRepository.create({
       title: createPlanDto.title,
@@ -33,7 +33,7 @@ export class PlanService {
     });
     await this.planRepository.save(plan);
 
-    return 'This action adds a new plan';
+    return 'This action adds a new plan successfully';
   }
 
   // 해당 사용자의 모든 계획을 가져온다.
