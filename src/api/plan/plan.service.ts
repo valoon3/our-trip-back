@@ -38,22 +38,12 @@ export class PlanService {
   async findAllPlan(user) {
     try {
       const planList: Plan[] = await this.planRepository.find({
-        // where: { user },
         relations: {
           user: true,
         },
       });
 
-      const result = planList.map((plan) => ({
-        title: plan.title,
-        description: plan.description,
-        startDate: plan.startDate,
-        endDate: plan.endDate,
-        createdAt: plan.createdAt,
-        updatedAt: plan.updatedAt,
-      }));
-
-      return result;
+      return planList.filter((plan) => plan.user.id === user.id);
     } catch (err) {
       console.error(err);
     }
