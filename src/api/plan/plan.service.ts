@@ -33,9 +33,12 @@ export class PlanService {
       startDate: createPlanDto.startDate,
       endDate: createPlanDto.endDate,
     });
-    await this.planRepository.save(plan);
 
-    return 'This action adds a new plan successfully';
+    const saveEntity = await this.planRepository.save(plan);
+
+    const { id, ...result } = saveEntity;
+
+    return result;
   }
 
   // 해당 사용자의 모든 계획을 가져온다.
