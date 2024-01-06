@@ -19,9 +19,8 @@ export class Plan {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => User, (user) => user.id)
-  @JoinTable()
-  user: User[];
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
 
   @OneToMany(() => PlanDetail, (planDetail) => planDetail.title)
   planDetail?: PlanDetail[];

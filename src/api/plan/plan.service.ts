@@ -19,19 +19,12 @@ export class PlanService {
 
   // 계획 생성
   async createPlan(user: any, createPlanDto: CreatePlanDto) {
-    // const plans = await this.findAllPlan(user);
-    // const exist = plans.find((plan) => plan.title === createPlanDto.title);
-    //
-    // if (exist)
-    //   return {
-    //     message: '이미 존재하는 계획입니다.',
-    //   };
-
     const plan = this.planRepository.create({
       title: createPlanDto.title,
       description: createPlanDto.description,
       startDate: createPlanDto.startDate,
       endDate: createPlanDto.endDate,
+      user: user,
     });
 
     const saveEntity = await this.planRepository.save(plan);
@@ -45,7 +38,10 @@ export class PlanService {
   async findAllPlan(user) {
     try {
       const planList: Plan[] = await this.planRepository.find({
-        where: { user },
+        // where: { user },
+        relations: {
+          user: true,
+        },
       });
 
       const result = planList.map((plan) => ({

@@ -36,6 +36,6 @@ export class User extends BaseEntity {
   @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmark: Bookmark[];
 
-  @ManyToMany(() => Plan, (Plan) => Plan.user)
+  @OneToMany(() => Plan, (Plan) => Plan.user)
   plan: Plan[];
 }
