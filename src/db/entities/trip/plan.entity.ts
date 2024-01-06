@@ -30,14 +30,14 @@ export class Plan {
   @Index()
   title: string; // 계획 제목
 
-  @Column()
+  @Column({ nullable: true })
   description?: string; // 계획 설명
 
   @CreateDateColumn({ nullable: true })
-  createdAt: Date; // 계획 생성 날짜
+  createdAt?: Date; // 계획 생성 날짜
 
   @UpdateDateColumn({ nullable: true })
-  updatedAt: Date; // 계획 생성 날짜
+  updatedAt?: Date; // 계획 생성 날짜
 
   @Column()
   startDate?: Date; // 계획 시작 날짜

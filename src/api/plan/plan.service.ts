@@ -29,6 +29,7 @@ export class PlanService {
 
     const plan = this.planRepository.create({
       title: createPlanDto.title,
+      description: createPlanDto.description,
       startDate: createPlanDto.startDate,
       endDate: createPlanDto.endDate,
     });
