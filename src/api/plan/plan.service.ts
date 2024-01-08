@@ -7,6 +7,7 @@ import { PlaceRepository } from '../trip/place.repository';
 import { Plan } from '../../db/entities/trip/plan.entity';
 import { PlanDetailRepository } from './planDetail.repository';
 import { PlanDto } from './dto/plan.dto';
+import { User } from '../../db/entities/User.entity';
 
 @Injectable()
 export class PlanService {
@@ -30,6 +31,7 @@ export class PlanService {
     const saveEntity = await this.planRepository.save(plan);
 
     const { id, ...result } = saveEntity;
+    delete result.user;
 
     return result;
   }
@@ -37,13 +39,19 @@ export class PlanService {
   // 해당 사용자의 모든 계획을 가져온다.
   async findAllPlan(user) {
     try {
-      const planList: Plan[] = await this.planRepository.find({
+      const planList = await this.planRepository.find({
         relations: {
           user: true,
+          planDetail: true,
         },
       });
 
-      return planList.filter((plan) => plan.user.id === user.id);
+      return planList
+        .filter((plan) => plan.user.id === user.id)
+        .map((plan) => {
+          const { id, user, ...result } = plan;
+          return result;
+        });
     } catch (err) {
       console.error(err);
     }
