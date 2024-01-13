@@ -5,4 +5,6 @@ export class CreatePlanDto extends GoogleMapPlaceResult {
   description?: string;
   startDate: Date;
   endDate: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

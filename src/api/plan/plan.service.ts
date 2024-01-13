@@ -8,6 +8,7 @@ import { Plan } from '../../db/entities/trip/plan.entity';
 import { PlanDetailRepository } from './planDetail.repository';
 import { PlanDto } from './dto/plan.dto';
 import { User } from '../../db/entities/User.entity';
+import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 
 @Injectable()
 export class PlanService {
@@ -34,6 +35,28 @@ export class PlanService {
     delete result.user;
 
     return result;
+  }
+
+  async createDetailPlan(
+    user: any,
+    selectedPlan: CreatePlanDto,
+    placeResult: GoogleMapPlaceResult,
+  ) {
+    console.log(user);
+    console.log(selectedPlan);
+    console.log(placeResult);
+
+    const planList = await this.planRepository.find({
+      where: {
+        user: user,
+      },
+      relations: {
+        user: true,
+        planDetail: true,
+      },
+    });
+
+    return true;
   }
 
   // 해당 사용자의 모든 계획을 가져온다.

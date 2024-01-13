@@ -16,6 +16,7 @@ import { UpdatePlanDto } from './dto/update-plan.dto';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { HttpExceptionFilter } from '../../common/exceptions/http-exception.filter';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 
 @Controller('api/plan')
 @UseGuards(JwtAuthGuard)
@@ -25,10 +26,28 @@ export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
   @Post('/')
-  @ApiOperation({ summary: '계획 만들기', description: '회원가입 API' })
+  @ApiOperation({
+    summary: '계획 가져오기',
+    description: '계획에 대한 정보를 가져온다.',
+  })
   createPlan(@Req() req: any, @Body() createPlanDto: CreatePlanDto) {
     const user = req.user;
     return this.planService.createPlan(user, createPlanDto);
+  }
+
+  @Post('/detail')
+  @ApiOperation({
+    summary: '계획 상세 가져오기',
+    description: '계획에 대한 상세 정보를 가져온다.',
+  })
+  createDetailPlan(
+    @Req() req: any,
+    @Body('selectedPlan') selectedPlan: CreatePlanDto,
+    @Body('placeResult') placeResult: GoogleMapPlaceResult,
+  ) {
+    const user = req.user;
+
+    return this.planService.createDetailPlan(user, selectedPlan, placeResult);
   }
 
   @Get('/')

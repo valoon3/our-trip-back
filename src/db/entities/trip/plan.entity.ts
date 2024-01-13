@@ -22,7 +22,7 @@ export class Plan {
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 
-  @OneToMany(() => PlanDetail, (planDetail) => planDetail.title)
+  @OneToMany(() => PlanDetail, (planDetail) => planDetail.plan)
   planDetail?: PlanDetail[];
 
   @Column()

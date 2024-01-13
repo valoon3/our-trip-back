@@ -16,8 +16,11 @@ export class PlanDetail {
   @ManyToOne(() => Place, (place) => place.name)
   place?: Place;
 
-  @ManyToOne(() => Plan, (plan) => plan.title)
-  title: Plan;
+  @ManyToOne(() => Plan, (plan) => plan.id)
+  plan: Plan;
+
+  @Column()
+  planDate: Date; // 계획 날짜
 
   @Column()
   priority: number; // 우선 순위
