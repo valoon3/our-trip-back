@@ -72,7 +72,16 @@ export class PlanService {
       return planList
         .filter((plan) => plan.user.id === user.id)
         .map((plan) => {
-          const { id, user, ...result } = plan;
+          const result = {
+            title: plan.title,
+            description: plan.description,
+            startDate: plan.startDate.toISOString(),
+            endDate: plan.endDate.toISOString(),
+            createdAt: plan.createdAt.toISOString(),
+            updatedAt: plan.updatedAt.toISOString(),
+            planDetail: plan.planDetail,
+          };
+
           return result;
         });
     } catch (err) {

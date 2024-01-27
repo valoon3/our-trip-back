@@ -4,6 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   // const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -22,6 +23,11 @@ async function bootstrap() {
 
   // global exception filter
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
 
   // cors
   app.enableCors({

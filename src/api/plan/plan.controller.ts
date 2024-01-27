@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   UseFilters,
+  ValidationPipe,
 } from '@nestjs/common';
 import { PlanService } from './plan.service';
 import { CreatePlanDto } from './dto/create-plan.dto';
@@ -43,9 +44,17 @@ export class PlanController {
   createDetailPlan(
     @Req() req: any,
     @Body('selectedPlan') selectedPlan: CreatePlanDto,
+    @Body('selectedDate')
+    selectedDate: Date,
     @Body('placeResult') placeResult: GoogleMapPlaceResult,
   ) {
     const user = req.user;
+
+    console.log(selectedPlan);
+    console.log(typeof selectedDate);
+    console.log(selectedDate);
+    console.log(selectedDate.getDate());
+    console.log(placeResult);
 
     return this.planService.createDetailPlan(user, selectedPlan, placeResult);
   }
