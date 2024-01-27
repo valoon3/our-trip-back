@@ -50,13 +50,12 @@ export class PlanController {
   ) {
     const user = req.user;
 
-    console.log(selectedPlan);
-    console.log(typeof selectedDate);
-    console.log(selectedDate);
-    console.log(selectedDate.getDate());
-    console.log(placeResult);
-
-    return this.planService.createDetailPlan(user, selectedPlan, placeResult);
+    return this.planService.createDetailPlan(
+      user,
+      selectedPlan,
+      selectedDate,
+      placeResult,
+    );
   }
 
   @Get('/')

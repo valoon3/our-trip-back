@@ -40,6 +40,7 @@ export class PlanService {
   async createDetailPlan(
     user: any,
     selectedPlan: CreatePlanDto,
+    selectedDate: Date,
     placeResult: GoogleMapPlaceResult,
   ) {
     console.log(user);
@@ -48,13 +49,22 @@ export class PlanService {
 
     const planList = await this.planRepository.find({
       where: {
-        user: user,
+        user: {
+          email: user.email,
+        },
+        title: selectedPlan.title,
+        description: selectedPlan.description,
+        startDate: selectedPlan.startDate,
+        endDate: selectedPlan.endDate,
+        createdAt: selectedPlan.createdAt,
       },
       relations: {
         user: true,
         planDetail: true,
       },
     });
+
+    console.log(planList);
 
     return true;
   }

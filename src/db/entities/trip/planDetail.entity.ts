@@ -9,7 +9,7 @@ import { Place } from './Place.entity';
 import { Plan } from './plan.entity';
 
 @Entity()
-export class PlanDetail {
+export class PlanDetailEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

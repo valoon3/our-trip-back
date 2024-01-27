@@ -21,8 +21,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('/swagger', app, document);
 
-  // global exception filter
-  app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -34,6 +32,10 @@ async function bootstrap() {
     origin: true,
     credentials: true,
   });
+
+  // global exception filter
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   let port = 8080;
 
   if (process.env.NODE_ENV === 'production') {
