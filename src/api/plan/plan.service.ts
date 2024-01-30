@@ -40,7 +40,7 @@ export class PlanService {
   async createDetailPlan(
     user: any,
     selectedPlan: CreatePlanDto,
-    selectedDate: Date,
+    planDate: Date,
     placeResult: GoogleMapPlaceResult,
   ) {
     console.log(user);
@@ -52,11 +52,6 @@ export class PlanService {
         user: {
           email: user.email,
         },
-        title: selectedPlan.title,
-        description: selectedPlan.description,
-        startDate: selectedPlan.startDate,
-        endDate: selectedPlan.endDate,
-        createdAt: selectedPlan.createdAt,
       },
       relations: {
         user: true,
@@ -65,6 +60,15 @@ export class PlanService {
     });
 
     console.log(planList);
+
+    const plan = planList.find(
+      (plan) =>
+        plan.title === selectedPlan.title &&
+        plan.description === selectedPlan.description &&
+        plan.createdAt.toISOString() === selectedPlan.createdAt.toISOString(),
+    );
+
+    console.log(plan);
 
     return true;
   }
