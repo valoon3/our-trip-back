@@ -46,6 +46,7 @@ export class PlanService {
     console.log(user);
     console.log(selectedPlan);
     console.log(placeResult);
+    console.log(planDate);
 
     const planList = await this.planRepository.find({
       where: {
@@ -59,8 +60,6 @@ export class PlanService {
       },
     });
 
-    console.log(planList);
-
     const plan = planList.find(
       (plan) =>
         plan.title === selectedPlan.title &&
@@ -68,7 +67,23 @@ export class PlanService {
         plan.createdAt.toISOString() === selectedPlan.createdAt.toISOString(),
     );
 
-    console.log(plan);
+    await this.placeRepository.createAndUpdate(placeResult);
+    const place = await this.placeRepository.findOne({
+      where: {
+        id: placeResult.place_id,
+      },
+    });
+
+    const result = this.planDetailRepository.create({
+      plan: plan,
+      place: place,
+      planDate: planDate,
+    });
+
+    const temp = await this.planDetailRepository.save(result);
+
+    // console.log(plan);
+    console.log(temp);
 
     return true;
   }

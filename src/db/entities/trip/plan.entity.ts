@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { Place } from './Place.entity';
 import { User } from '../User.entity';
-import { PlanDetailEntity } from './planDetail.entity';
+import { PlanDetail } from './planDetail.entity';
 
 @Entity()
 export class Plan {
@@ -22,8 +22,8 @@ export class Plan {
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 
-  @OneToMany(() => PlanDetailEntity, (planDetail) => planDetail.plan)
-  planDetail?: PlanDetailEntity[];
+  @OneToMany(() => PlanDetail, (planDetail) => planDetail.plan)
+  planDetail?: PlanDetail[];
 
   @Column()
   @Index()

@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { Bookmark } from './bookmark.entity';
-import { PlanDetailEntity } from './planDetail.entity';
+import { PlanDetail } from './planDetail.entity';
 
 @Entity({ name: 'places' })
 export class Place {
@@ -10,8 +10,8 @@ export class Place {
   @OneToMany(() => Bookmark, (bookmark) => bookmark.place)
   bookmarks: Bookmark[];
 
-  @OneToMany(() => PlanDetailEntity, (PlanDetail) => PlanDetail.place)
-  planDetail: PlanDetailEntity[];
+  @OneToMany(() => PlanDetail, (PlanDetail) => PlanDetail.place)
+  planDetail: PlanDetail[];
 
   @Column()
   name?: string;

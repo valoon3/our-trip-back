@@ -9,7 +9,7 @@ import { Place } from './Place.entity';
 import { Plan } from './plan.entity';
 
 @Entity()
-export class PlanDetailEntity {
+export class PlanDetail {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,7 +22,7 @@ export class PlanDetailEntity {
   @Column()
   planDate: Date; // 계획 날짜
 
-  @Column()
+  @Column({ nullable: true })
   priority: number; // 우선 순위
 
   @CreateDateColumn()

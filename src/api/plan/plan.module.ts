@@ -8,11 +8,11 @@ import { UserRepository } from '../user/user.repository';
 import { User } from '../../db/entities/User.entity';
 import { PlaceRepository } from '../trip/place.repository';
 import { Place } from '../../db/entities/trip/Place.entity';
-import { PlanDetailEntity } from '../../db/entities/trip/planDetail.entity';
+import { PlanDetail } from '../../db/entities/trip/planDetail.entity';
 import { PlanDetailRepository } from './planDetail.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Plan, User, Place, PlanDetailEntity])],
+  imports: [TypeOrmModule.forFeature([Plan, User, Place, PlanDetail])],
   controllers: [PlanController],
   providers: [
     PlanService,
