@@ -94,7 +94,9 @@ export class PlanService {
       const planList = await this.planRepository.find({
         relations: {
           user: true,
-          planDetail: true,
+          planDetail: {
+            place: true,
+          },
         },
       });
 
