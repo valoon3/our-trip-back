@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePlanDto } from './dto/create-plan.dto';
-import { UpdatePlanDto } from './dto/update-plan.dto';
 import { PlanRepository } from './plan.repository';
 import { UserRepository } from '../user/user.repository';
 import { PlaceRepository } from '../trip/place.repository';
 import { Plan } from '../../db/entities/trip/plan.entity';
 import { PlanDetailRepository } from './planDetail.repository';
-import { PlanDto } from './dto/plan.dto';
-import { User } from '../../db/entities/User.entity';
 import { GoogleMapPlaceResult } from '../../common/types/googleMap.type';
 
 @Injectable()
@@ -96,6 +93,11 @@ export class PlanService {
           user: true,
           planDetail: {
             place: true,
+          },
+        },
+        order: {
+          planDetail: {
+            planDate: 'ASC',
           },
         },
       });
