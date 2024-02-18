@@ -37,6 +37,7 @@ export class TripController {
     status: HttpStatus.CONFLICT,
   })
   @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
   async getBookmark(@Req() req) {
     const userLoginInfo = req.user;
 

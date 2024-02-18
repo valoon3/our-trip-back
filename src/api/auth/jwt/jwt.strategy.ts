@@ -1,5 +1,11 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Injectable, Next, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Next,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { AuthService } from '../auth.service';
 import { UserRepository } from '../../user/user.repository';
@@ -10,7 +16,10 @@ const cookieExtractor = function (req) {
   if (req && req.cookies['token']) {
     token = req.cookies['token'] || req.header;
   } else {
-    return new Error('No JWT found');
+    throw new UnauthorizedException('UNAUTHORIZED', {
+      cause: new Error(),
+      description: '로그인이 필요합니다.',
+    });
   }
   return token;
 };
