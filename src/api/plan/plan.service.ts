@@ -122,6 +122,36 @@ export class PlanService {
     }
   }
 
+  // 계획 방문 시간 수정
+  async updateDeetailPlanTime(
+    user: any,
+    selectedPlan: CreatePlanDto,
+    selectedDate: Date,
+    placeResult: GoogleMapPlaceResult,
+  ) {
+    const planList = await this.planRepository.find({
+      relations: {
+        user: true,
+        planDetail: {
+          place: true,
+        },
+      },
+      order: {
+        planDetail: {
+          planDate: 'ASC',
+        },
+      },
+      where: {
+        user: {
+          email: user.email,
+        },
+        planDetail: {},
+      },
+    });
+
+    return true;
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} plan`;
   }

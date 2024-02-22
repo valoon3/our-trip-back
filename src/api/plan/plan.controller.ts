@@ -58,6 +58,31 @@ export class PlanController {
     );
   }
 
+  // 계획 시간 수정
+  @Patch('/detail')
+  @ApiOperation({
+    summary: '계획 시간 수정',
+    description: '계획에 대한 상세 정보를 수정한다.',
+  })
+  updateDetailPlan(
+    @Req() req: any,
+    @Body('selectedPlan') selectedPlan: CreatePlanDto,
+    @Body('selectedDate')
+    selectedDate: Date,
+    @Body('placeResult') placeResult: GoogleMapPlaceResult,
+  ) {
+    const user = req.user;
+
+    const result = this.planService.updateDeetailPlanTime(
+      user,
+      selectedPlan,
+      selectedDate,
+      placeResult,
+    );
+
+    return true;
+  }
+
   @Get('/')
   findAll(@Req() req: any) {
     const user = req.user;

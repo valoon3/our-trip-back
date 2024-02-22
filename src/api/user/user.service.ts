@@ -56,10 +56,8 @@ export class UserService {
     loginResult.name = user.name;
     loginResult.loginError = false;
 
-    // 쿠키를 헤더에 포함시키기
-    // res.setHeader('Set-Cookie', 'Bearer ' + token);
-    return res
-      .cookie('token', /*'Bearer ' + */ token, {
+    return res // acessToken 첨부
+      .cookie('token', token, {
         httpOnly: true,
         // maxAge: 24 * 60 * 60 * 1000, //1 day
         maxAge: 24 * 60 * 60 * 1000 * 7, //7 day
@@ -67,11 +65,6 @@ export class UserService {
       })
       .header('')
       .json(loginResult);
-
-    //   // todo : accessToken 만들기
-    //   res.cookie('token', token, {
-    //     httponly: true,
-    //   });
   }
 
   // findAll() {
