@@ -5,3 +5,5 @@ example/hello.txt
 .idea
 test
 node_modules
+.dockerignore
+dist
