@@ -1,4 +1,4 @@
-name: Github Action demo
+name: Github Action docker image
 
 on:
   push:
@@ -7,13 +7,14 @@ on:
 
 jobs:
 
-  build:
-
+  our-trip-back:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
-      - name: Login Dockerhub
+
+      - name: use node.js
+        uses: actions/setup-node@v2
         env:
           DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
